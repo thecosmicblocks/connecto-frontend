@@ -1,11 +1,27 @@
 "use client";
 
-import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { CHAIN_TYPE, ChainTypeValue } from "../consts/chain";
+import {
+    createContext,
+    ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState
+}                        from "react";
+import {
+    CHAIN_TYPE,
+    ChainTypeValue
+}                        from "../consts/chain";
 import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
-import { useEVMClient } from "../hooks/useEVMClient";
-import { TODO } from "../consts/type";
-import base58 from "bs58";
+import { useEVMClient }  from "../hooks/useEVMClient";
+import { TODO }          from "../consts/type";
+import base58            from "bs58";
+import { connectWallet } from "@app/services/authService";
+import {
+    getUserInfo,
+    saveUserInfo
+}                        from "@app/utils/helpers";
 
 type CONNECT_WALLET_STEP = "CHOOSE_A_NETWORK" | "CONNECT_TO_WALLET";
 type WalletMetadata = {
@@ -46,7 +62,7 @@ const defaultValue: DefaultWalletContext = {
   setSelectedWalletChainType: (_type: ChainTypeValue | undefined) => { },
   walletMetadata: {},
   selectedWalletMetadata: undefined,
-  userData: undefined,
+  userData: getUserInfo(),
   setUserData: (_userData: TODO) =>  {},
 }
 
@@ -73,7 +89,10 @@ export const WalletModalProvider = ({
   const setIsLoggedIn = useCallback((_isLoggedIn: boolean) => { setGlobalIsLoggedIn(_isLoggedIn) }, [])
 
     const [userData, setGlobalUserData] = useState<TODO>(defaultValue.userData)
-    const setUserData = useCallback((_userData: TODO) => { setGlobalUserData(_userData) }, [])
+    const setUserData = useCallback((_userData: TODO) => {
+        setGlobalUserData(_userData)
+        saveUserInfo(_userData)
+    }, [])
 
     const {
         wallet: solanaWallet,
@@ -137,7 +156,13 @@ See privacy and policy at ${window.location.host}/privacy-policy
         async function init() {
             const signature = await selectedWalletMetadata?.signMsg();
             console.log(signature);
-            setUserData({ address: selectedWalletMetadata?.address });
+            const user = await connectWallet({
+                walletAddress: selectedWalletMetadata?.address,
+                message: MSG,
+                signature: signature
+            })
+            saveUserInfo(user)
+            setUserData(user);
         }
         if (
             selectedWalletChainType &&

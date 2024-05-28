@@ -4,27 +4,26 @@ import {
     Button,
     List,
     Modal
-}                                       from "flowbite-react";
-import Image                            from "next/image";
+}                                from "flowbite-react";
+import Image                     from "next/image";
 import {
     CHAIN_LOGO,
-    CHAIN_TYPE,
-    ChainTypeValue
-}                                       from "../consts/chain";
-import { useWalletModalContext }        from "../context/WalletContext";
-import { EVMWalletList }                from "./EVMConnectWalletList";
-import { SolanaConnectWalletDialog }    from "./SolanaConnectWalletList";
-import { Center } from "./Center";
-import clsx from "clsx";
+    CHAIN_TYPE
+}                                from "../consts/chain";
+import { useWalletModalContext } from "../context/WalletContext";
+import { EVMWalletList }         from "./EVMConnectWalletList";
+import { Center }                from "./Center";
+import clsx                      from "clsx";
 
 export const ToggleWalletModalBtn = ({
     className,
 }: any) => {
     const walletContext = useWalletModalContext();
+    console.log(walletContext);
+    console.log(walletContext.userData?.user?.walletAddress);
     const selectedWalletMetadata = walletContext.selectedWalletMetadata;
     const is0x = selectedWalletMetadata?.address?.startsWith("0x");
-    
-    return selectedWalletMetadata?.isConnected && walletContext?.userData?.address ? (
+    return selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress ? (
         <Button
             onClick={() => {
                 walletContext.setUserData(undefined);
@@ -51,8 +50,8 @@ export const ToggleWalletModalBtn = ({
                 )
             }
             <Center>
-                Disconnect {walletContext.userData?.address?.substring(0, is0x ? 6 : 3)}...
-                {walletContext.userData?.address?.substring(walletContext.userData?.address?.length - (is0x ? 4 : 3))}
+                Disconnect {walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...
+                {walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}
             </Center>
         </Button>
     ) : (

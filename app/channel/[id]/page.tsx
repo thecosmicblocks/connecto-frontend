@@ -268,7 +268,7 @@ function DetailChannel() {
                     />
                 </article>
                 <div className={'mt-20 md:w-1/5'}>
-                    <Card className={'p-1'}>
+                    <Card className={'p-1 w-full'}>
                         <SocialList detail={detailChannel}/>
                     </Card>
                     <Card>

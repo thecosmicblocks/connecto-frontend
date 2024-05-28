@@ -1,7 +1,10 @@
 "use client";
 
 import { ethers } from 'ethers';
-import { useAccount, useDisconnect } from "wagmi";
+import {
+    useAccount,
+    useDisconnect
+}                 from "wagmi";
 import { META_MASK_ERROR_NAMES } from "../consts/metamaskError";
 
 const handleError = (errorName = '') => {
@@ -20,6 +23,7 @@ export const useEVMClient = () => {
         },
     });
     const { isConnected, address, } = useAccount();
+    console.log(isConnected, address)
     const client = typeof window !== "undefined" && typeof window.ethereum !== 'undefined' ?
       new ethers.providers.Web3Provider(window.ethereum) : null;
     const signer = client?.getSigner();

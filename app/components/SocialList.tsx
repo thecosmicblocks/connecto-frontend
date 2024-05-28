@@ -46,12 +46,12 @@ export default function SocialList({detail}: SocialListProps) {
                         </Button>
                     </Tooltip>
                     <Tooltip content={'Twitch'} placement={'bottom'}>
-                        <Button className={'md:p-2  items-center self-center'} type={'button'} color={'blue'}>
+                        <Button className={'md:p-1  items-center self-center'} type={'button'} color={'blue'}>
                             <Link
                                 href={socialLinks.twitch || "#"}
                                 target="_blank"
                             >
-                                <BsTwitch size={"32"}/>
+                                <BsTwitch className={"lg:size-10"}/>
                             </Link>
                         </Button>
                     </Tooltip>
