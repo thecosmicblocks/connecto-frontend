@@ -7,3 +7,4 @@ export const listingOrder = async (params: any) => await post('/nfts/listing-ord
 export const marketOrders = async (params: {} | undefined) => await get('/nfts/market-orders', params)
 export const transferNFT = async (params: any) => await post('/nfts/market-buy-order', params)
 export const cancelListingOrder = async (params: any) => await post('/nfts/market-cancel-order', params)
+export const getMetadata = async (collectionAddr: string, nftId: string) => await get(`/nfts/metadata/${collectionAddr}/${nftId}`)

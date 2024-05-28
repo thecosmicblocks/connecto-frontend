@@ -11,9 +11,8 @@ type NFTProfileProps = {
     className: any
 }
 export default function NFTProfile({data, className = ''}: NFTProfileProps) {
-    const userInfo = getUserInfo();
     const _data = Array.isArray(data) ? data : []
-
+  
     return (
         <ul className={classNames("products", {[className]: true})}>
             {
@@ -26,7 +25,8 @@ export default function NFTProfile({data, className = ''}: NFTProfileProps) {
                     _data.map((_item, index) => {
                         return (
                             <li key={`item-index-${index}`}
-                                className="">
+                                className="mt-4"
+                            >
                                 <div className="">
                                     <Link
                                         href={_item.external_url}
@@ -47,13 +47,15 @@ export default function NFTProfile({data, className = ''}: NFTProfileProps) {
                                             </Link>
                                         </h3>
                                         <p
+                                            className="line-clamp-3"
                                             dangerouslySetInnerHTML={{
                                                 __html: _item?.description?.replace(/\n/g, '<br />')
                                             }}
                                         />
-                                        <span>{t('nft.symbol') + ' _item.symbol'}</span><br/>
+                                        <hr className="my-2 w-1/2"/>
+                                        <span>{t('nft.symbol').replace('{{symbol}}', `${_item.symbol}`)}</span><br/>
                                         <span className="">
-                                            {t('nft.released_at') + ' ' + dayjs(data.createdAt).format("YYYY-MM-DD")}
+                                            {t('nft.released_at').replace('{{time}}', dayjs(data.createdAt).format("YYYY MMM DD"))}
                                         </span>
                                     </div>
                                 </div>

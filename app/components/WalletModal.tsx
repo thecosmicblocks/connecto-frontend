@@ -19,10 +19,10 @@ export const ToggleWalletModalBtn = ({
     className,
 }: any) => {
     const walletContext = useWalletModalContext();
-    console.log(walletContext);
-    console.log(walletContext.userData?.user?.walletAddress);
+
     const selectedWalletMetadata = walletContext.selectedWalletMetadata;
     const is0x = selectedWalletMetadata?.address?.startsWith("0x");
+
     return selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress ? (
         <Button
             onClick={() => {

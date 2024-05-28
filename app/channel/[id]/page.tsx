@@ -18,6 +18,7 @@ import ChannelPost                   from '@app/components/Channel/Post'
 import {
     donateChannel,
     getDetailChannel,
+    getMetadata,
     subscribeChannel
 }                                    from '@app/services'
 import {
@@ -70,11 +71,11 @@ function DetailChannel() {
         const getDetail = async () => {
             const res = await getDetailChannel(id);
             const nftCollectionData = await Promise.all(
-                res?.nftCollections?.map(async (_item: { metadata_uri: string }) => {
-                    const getMetadataRes = await axios.get(_item.metadata_uri)
+                res?.nftCollections?.map(async (_item: any) => {
+                    const getMetadataRes = await getMetadata(_item.address, '0')
                     return {
                         ..._item,
-                        ...getMetadataRes.data
+                        ...getMetadataRes
                     }
                 }) || [ async () => {
                 } ]
