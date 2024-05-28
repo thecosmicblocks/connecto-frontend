@@ -10,7 +10,7 @@ const instance = axios.create(options)
 instance.interceptors.request.use(
     (config: any) => {
         const token = load(STORAGE.ACCESS_TOKEN) || ''
-        if (token) instance.defaults.headers.common.Authorization = `${token}`
+        if (token) instance.defaults.headers.common.Authorization = `${token.token}`
         return config
     },
     (error: any) => Promise.reject(error),
@@ -26,7 +26,7 @@ const get = async (url: string, params = {}) => {
         const config = { params }
         if (!instance.defaults.headers.common.Authorization) {
             const token = load(STORAGE.ACCESS_TOKEN) || ''
-            if (token) instance.defaults.headers.common.Authorization = `${token}`
+            if (token) instance.defaults.headers.common.Authorization = `${token.token}`
         }
         const { data: getData } = await instance.get(getUrlPrefix() + url, config)
         return getData
