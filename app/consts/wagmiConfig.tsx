@@ -9,21 +9,24 @@ import { opal }            from './wagmiChain';
 import { configureChains } from "@wagmi/core";
 import {
   fallback,
-  http
+  http,
 }                          from "viem";
+import { injected } from 'wagmi/connectors'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+const { chains } = configureChains(
   [opal],
   [w3mProvider({ projectId })]
 );
 
 export const wagmiConfig = createConfig({
   chains: [ opal ],
+  connectors: [injected()],
+  ssr: true,
   transports: {
     [opal.id]: fallback([ http(opal.rpcUrls.default.http[0]) ]),
-  }
+  },
 });
 export const ethereumClient = new EthereumClient(wagmiConfig, chains);
 

@@ -23,7 +23,7 @@ export const getUserInfo = () => {
 }
 
 export const saveUserInfo = (data: { user: any; accessToken: any }) => {
-    cookie.save(STORAGE.USER_INFO, JSON.stringify(data.user), {})
+    cookie.save(STORAGE.USER_INFO, JSON.stringify(data?.user), {})
     cookie.save(STORAGE.ACCESS_TOKEN, data.accessToken, {})
 }
 

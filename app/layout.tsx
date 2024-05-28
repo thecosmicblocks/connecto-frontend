@@ -6,7 +6,7 @@ import {
     ThemeModeScript
 }                              from "flowbite-react";
 import type { Metadata }       from "next";
-import { WagmiConfig }         from 'wagmi';
+import { WagmiProvider }         from 'wagmi';
 import { EVMWalletModal }      from './components/EVMWalletModal';
 import { WalletModal }         from './components/WalletModal';
 import { wagmiConfig }         from './consts/wagmiConfig';
@@ -16,6 +16,7 @@ import { CommonContextProvider } from './context/CommonContext';
 import { ToastProvider }       from "@app/context/ToastContext";
 import { ToastContainer }      from "@app/components/Toast";
 import { ApolloContext } from './context/ApolloContext';
+import { TanstackContext } from './context/TanstackContext';
 
 export const metadata: Metadata = {
     title: "Connecto",
@@ -36,7 +37,8 @@ export default function RootLayout({
         <body className={'w-full p-1 lg:px-9 xl:px-32'}>
 
         <ToastProvider>
-            <WagmiConfig config={wagmiConfig}>
+            <WagmiProvider config={wagmiConfig}>
+                <TanstackContext>
                     <Flowbite theme={{mode: 'dark', theme: themes}}>
                         <WalletModalProvider>
                             <CommonContextProvider>
@@ -53,7 +55,8 @@ export default function RootLayout({
                             </CommonContextProvider>
                         </WalletModalProvider>
                     </Flowbite>
-            </WagmiConfig>
+                </TanstackContext>
+            </WagmiProvider>
         </ToastProvider>
         <EVMWalletModal/>
         </body>
