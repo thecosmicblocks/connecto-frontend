@@ -5,7 +5,6 @@ import {
     confirmExchangeCollection,
     requestExchangeCollection
 }                                         from '@app/services/inventoryService'
-import { confirmTransactionFromFrontend } from '@app/utils/transactionSigner'
 import { FaAngleDown }                    from 'react-icons/fa'
 import classNames                         from 'classnames'
 import {
@@ -157,8 +156,7 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
                     <div className={'flex-col items-center'}>
                         <Avatar img={data.reward_data?.image_uri}/>
                         <p className={'mt-6'}>
-                            //TODO
-                            {t('inventory.exchange_msg', nftInfo.length + ' ' + data.reward_data?.name)}
+                            {t('inventory.exchange_msg').replace("{{amount}}", nftInfo.length.toString()).replace("{{name}}", data.reward_data?.name?.toString())}
                         </p>
                     </div>
                 </Modal.Body>

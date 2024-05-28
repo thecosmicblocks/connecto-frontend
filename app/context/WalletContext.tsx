@@ -15,7 +15,7 @@ import {
 }                        from "../consts/chain";
 import { useEVMClient }  from "../hooks/useEVMClient";
 import { TODO }          from "../consts/type";
-import base58            from "bs58";
+// import base58            from "bs58";
 import { connectWallet } from "@app/services/authService";
 import {
     getUserInfo,

@@ -3,7 +3,6 @@ import {Chain} from "viem/chains";
 export const polygonAmoy: Chain = {
     id: 80_002,
     name: 'Polygon Amoy',
-    network: '80002',
     nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
     rpcUrls: {
         default: {
@@ -18,7 +17,6 @@ export const polygonAmoy: Chain = {
 export const opal: Chain = {
     id: 8882,
     name: 'Opal',
-    network: '8882',
     blockExplorers: {
         default: {
             name: 'subscan',

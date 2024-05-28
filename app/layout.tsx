@@ -15,6 +15,7 @@ import "./globals.css";
 import { CommonContextProvider } from './context/CommonContext';
 import { ToastProvider }       from "@app/context/ToastContext";
 import { ToastContainer }      from "@app/components/Toast";
+import { ApolloContext } from './context/ApolloContext';
 
 export const metadata: Metadata = {
     title: "Connecto",
@@ -39,14 +40,16 @@ export default function RootLayout({
                     <Flowbite theme={{mode: 'dark', theme: themes}}>
                         <WalletModalProvider>
                             <CommonContextProvider>
-                                <WalletModal/>
-                                <Header>
-                                </Header>
-                                <div className={'min-h-[70vh] w-full p-1' }>
-                                    {children}
-                                </div>
-                                <GFooter></GFooter>
-                                <ToastContainer></ToastContainer>
+                                <ApolloContext>
+                                    <WalletModal/>
+                                    <Header>
+                                    </Header>
+                                    <div className={'min-h-[70vh] w-full p-1' }>
+                                        {children}
+                                    </div>
+                                    <GFooter></GFooter>
+                                    <ToastContainer></ToastContainer>
+                                </ApolloContext>
                             </CommonContextProvider>
                         </WalletModalProvider>
                     </Flowbite>
