@@ -1,10 +1,10 @@
 import classNames      from "classnames";
 import { TbMoodEmpty } from 'react-icons/tb'
-import { getUserInfo } from "@app/utils/helpers";
 import Link            from "next/link";
-import { Avatar }      from "flowbite-react";
 import dayjs           from 'dayjs';
 import { t }           from "@app/utils/common";
+import React      from "react";
+import { Avatar } from "flowbite-react";
 
 type NFTProfileProps = {
     data: any
@@ -27,13 +27,13 @@ export default function NFTProfile({data, className = ''}: NFTProfileProps) {
                             <li key={`item-index-${index}`}
                                 className="mt-4"
                             >
-                                <div className="">
+                                <div className="flex gap-2">
                                     <Link
                                         href={_item.external_url}
                                         target="_blank"
-                                        className=""
+                                        className="min-w-36"
                                     >
-                                        <Avatar
+                                        <Avatar size="xl"
                                             img={_item.image}
                                         />
                                     </Link>

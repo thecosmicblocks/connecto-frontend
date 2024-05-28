@@ -1,6 +1,9 @@
 import React      from 'react'
 import Task       from './Task'
-import { Avatar } from "flowbite-react";
+import {
+    Avatar,
+    Card
+} from "flowbite-react";
 import dayjs      from "dayjs";
 import Image      from 'next/image';
 export interface PostItemProps {
@@ -14,7 +17,7 @@ const PostItem = ({post, avatar, channelName, channelId}: PostItemProps) => {
     const {images} = post
     const [ thumbnail ] = images
     return (
-        <div className={'flex w-full flex-col items-center mt-8 border-b-2 border-teal-500 py-8'}>
+        <Card className={'flex w-full flex-col items-center mt-8 border-b-2 border-teal-500 py-8'} >
             <h3
                 className={'mb-3 text-3xl'}
             >{post?.title}</h3>
@@ -46,7 +49,7 @@ const PostItem = ({post, avatar, channelName, channelId}: PostItemProps) => {
                 post={post}
                 channelId={channelId}
             />
-        </div>
+        </Card>
     )
 }
 

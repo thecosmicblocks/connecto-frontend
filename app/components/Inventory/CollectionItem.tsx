@@ -6,10 +6,6 @@ import {
     requestExchangeCollection
 }                                         from '@app/services/inventoryService'
 import { confirmTransactionFromFrontend } from '@app/utils/transactionSigner'
-import {
-    useConnection,
-    useWallet
-}                                         from '@solana/wallet-adapter-react'
 import { FaAngleDown }                    from 'react-icons/fa'
 import classNames                         from 'classnames'
 import {
@@ -59,8 +55,6 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
     const [ isLoadingTransaction, setIsLoadingTransaction ] = useState(false)
     const [ isExpanded, setIsExpanded ] = useState(true)
 
-    const {connection} = useConnection()
-    const {wallet, signTransaction} = useWallet();
 
     const onCloseModal = () => setIsOpenModal(false)
     const onOpenModal = () => setIsOpenModal(true)
@@ -79,20 +73,11 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
                 "channelId": data.channel_id
             })
 
-            const _wallet = {
-                wallet,
-                signTransaction,
-            };
-
             const completedTransaction = await Promise.all(
                 requestExResp.encodedTxnData.map((_txData: WithImplicitCoercion<string> | {
                     [Symbol.toPrimitive](hint: "string"): string
                 }) => {
-                    return confirmTransactionFromFrontend(
-                        connection,
-                        _txData,
-                        _wallet
-                    );
+                    // return confirmTransactionFromFrontend();
                 })
             )
 
@@ -151,7 +136,6 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
                     </span>
                     {
                         nftInfo.map(_item => {
-                            // @ts-ignore
                             return (
                                 <>
                                     <CollectionPack key={_item._id} data={_item}/>
@@ -173,7 +157,8 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
                     <div className={'flex-col items-center'}>
                         <Avatar img={data.reward_data?.image_uri}/>
                         <p className={'mt-6'}>
-                            {t('inventory.exchange_msg', {amount: nftInfo.length, name: data.reward_data?.name})}
+                            //TODO
+                            {t('inventory.exchange_msg', nftInfo.length + ' ' + data.reward_data?.name)}
                         </p>
                     </div>
                 </Modal.Body>

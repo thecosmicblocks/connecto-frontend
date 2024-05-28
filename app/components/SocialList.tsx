@@ -41,17 +41,17 @@ export default function SocialList({detail}: SocialListProps) {
                                 target="_blank"
                                 type={'button'}
                             >
-                                <BsYoutube size={32}/>
+                                <BsYoutube/>
                             </Link>
                         </Button>
                     </Tooltip>
                     <Tooltip content={'Twitch'} placement={'bottom'}>
-                        <Button className={'md:p-1  items-center self-center'} type={'button'} color={'blue'}>
+                        <Button className={'md:p-2  items-center self-center'} type={'button'} color={'blue'}>
                             <Link
                                 href={socialLinks.twitch || "#"}
                                 target="_blank"
                             >
-                                <BsTwitch className={"lg:size-10"}/>
+                                <BsTwitch/>
                             </Link>
                         </Button>
                     </Tooltip>
@@ -64,7 +64,7 @@ export default function SocialList({detail}: SocialListProps) {
                                 target="_blank"
                                 className={'hover:cursor-pointer hover:bg-green-700'}
                             >
-                                <BsTwitter size={"32"}/>
+                                <BsTwitter/>
                             </Link>
                         </Button>
                     </Tooltip>
@@ -75,7 +75,7 @@ export default function SocialList({detail}: SocialListProps) {
                                 rel="nofollow"
                                 target="_blank"
                             >
-                                <BsInstagram size={"32"}/>
+                                <BsInstagram/>
                             </Link>
                         </Button>
                     </Tooltip>

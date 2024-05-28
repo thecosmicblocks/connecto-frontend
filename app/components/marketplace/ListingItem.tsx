@@ -3,12 +3,8 @@ import {
     cancelListingOrder,
     listingOrder,
 }                                         from '@app/services'
-import { confirmTransactionFromFrontend } from '@app/utils/helpers'
-import { WalletAdapterNetwork }           from '@solana/wallet-adapter-base'
-import {
-    useConnection,
-    useWallet,
-}                                         from '@solana/wallet-adapter-react'
+// import { confirmTransactionFromFrontend } from '@app/utils/helpers'
+
 import axios                              from 'axios'
 import React, {
     useMemo,
@@ -18,6 +14,7 @@ import CancelListingModal                 from './CancelListingModal'
 import { Button }                         from "flowbite-react";
 import { useToast }                       from "@app/hooks/useToast";
 import { t } from '@app/utils/common'
+import { opal }                           from "@app/consts/wagmiChain";
 
 export interface ListingItemProps {
     data: any;
@@ -27,15 +24,13 @@ const ListingItem = ({data}: ListingItemProps) => {
     const [ isOpen, setOpen ] = useState(false)
     const [ isOpenCancel, setOpenCancel ] = useState(false)
     const [ isLoading, setLoading ] = useState(false)
-    const {publicKey, wallet, signTransaction} = useWallet()
-    const {connection} = useConnection()
     const toast = useToast(4000)
 
     const getEncodeTransaction = async (args: { item: any }) => {
         const params = {
-            network: WalletAdapterNetwork.Devnet,
+            network: opal.name,
             nft_address: args.item,
-            sender: publicKey,
+            // sender: publicKey,
         }
         const {data: {result}} = await axios.post('/api/marketplace/listing-create', params)
         return {...args, encode: result?.result?.encoded_transaction}
@@ -43,12 +38,12 @@ const ListingItem = ({data}: ListingItemProps) => {
 
     const userSignTransaction = async (args: { price?: any; data?: any; item: any }) => {
         const {encode} = await getEncodeTransaction(args)
-        const tx = await confirmTransactionFromFrontend(
-            connection,
-            encode,
-            {wallet, signTransaction},
-        )
-        return {...args, tx}
+        // const tx = await confirmTransactionFromFrontend(
+        //     // connection,
+        //     encode,
+        //     // {wallet, signTransaction},
+        // )
+        // return {...args, tx}
     }
 
     const onListing = async ({price, item}: any, callback: () => void) => {
@@ -56,10 +51,10 @@ const ListingItem = ({data}: ListingItemProps) => {
             const res = await userSignTransaction({price, data, item})
             const params = {
                 mint: item,
-                price: res.price,
-                transaction: res.tx,
-                title: res.data.name,
-                image: res.data.image,
+                // price: res.price,
+                // transaction: res.tx,
+                // title: res.data.name,
+                // image: res.data.image,
                 infoId: data._id,
             }
             const responseOrder = await listingOrder(params)

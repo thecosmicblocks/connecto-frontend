@@ -107,7 +107,6 @@ const LeftMenu = ({
 export const WalletModal = () => {
     const walletContext  = useWalletModalContext();
     const MenuWalletList = {
-        [CHAIN_TYPE.SOLANA]: () => <></>, // SolanaConnectWalletDialog,
         [CHAIN_TYPE.EVM]: EVMWalletList,
     }
     const RightMenuContent      = MenuWalletList[walletContext.walletChainType];

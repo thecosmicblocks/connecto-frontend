@@ -2,11 +2,9 @@
 
 import ethIcon from '../assets/images/svg/eth.svg';
 import polygonIcon from '../assets/images/svg/polygon.svg';
-import solanaIcon from '../assets/images/svg/solana.svg';
 
 export type ChainId = number;
 export const CHAIN_TYPE = {
-  SOLANA: 'SOLANA',
   EVM: 'EVM',
   // SUI: 'SUI'
 } as const;
@@ -21,11 +19,9 @@ export interface ChainInfo {
 
 export const CHAIN_LOGO = {
   [CHAIN_TYPE.EVM]: ethIcon,
-  [CHAIN_TYPE.SOLANA]: solanaIcon,
 }
 
 export const CHAIN_ID_UNSET = 0;
-export const CHAIN_ID_SOLANA = 1;
 export const CHAIN_ID_ETH = 2;
 export const CHAIN_ID_TERRA = 3;
 export const CHAIN_ID_BSC = 4;
@@ -171,12 +167,6 @@ export const CHAINS: ChainInfo[] = [
   //   name: "Sei",
   //   logo: seiIcon,
   // },
-  {
-    id: CHAIN_ID_SOLANA,
-    name: "Solana",
-    logo: solanaIcon,
-    chainType: CHAIN_TYPE.SOLANA
-  },
   // {
   //   id: CHAIN_ID_SUI,
   //   name: "Sui",

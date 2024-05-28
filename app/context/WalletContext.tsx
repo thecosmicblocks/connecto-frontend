@@ -13,7 +13,6 @@ import {
     CHAIN_TYPE,
     ChainTypeValue
 }                        from "../consts/chain";
-import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
 import { useEVMClient }  from "../hooks/useEVMClient";
 import { TODO }          from "../consts/type";
 import base58            from "bs58";
@@ -93,13 +92,6 @@ export const WalletModalProvider = ({
         setGlobalUserData(_userData)
         saveUserInfo(_userData)
     }, [])
-
-    const {
-        wallet: solanaWallet,
-        publicKey,
-        disconnect: disconnectSolana,
-        signMessage: solanaSignMessage,
-    } = useSolanaWallet();
     const { 
         isConnected: evmIsConnected,
         address: evmAddress,
@@ -113,18 +105,6 @@ ${window.location.host} wants you to sign a message to login
 See privacy and policy at ${window.location.host}/privacy-policy
     `;
   const walletMetadata: Record<any, WalletMetadata> = useMemo(() => ({
-    [CHAIN_TYPE.SOLANA]: {
-        isConnected: solanaWallet?.adapter?.connected as boolean,
-        address: publicKey?.toString() as string,
-        disconnect: disconnectSolana,
-        icon: solanaWallet?.adapter.icon as any,
-        signMsg: async () => {
-            const encodedMessage = new TextEncoder().encode(MSG);
-            const signedMessage = await solanaSignMessage?.(encodedMessage);
-            const signature = base58.encode(signedMessage as Uint8Array);
-            return signature;
-        },
-    },
     [CHAIN_TYPE.EVM]: {
         isConnected: evmIsConnected as boolean,
         address: evmAddress as string,
@@ -135,14 +115,11 @@ See privacy and policy at ${window.location.host}/privacy-policy
         },
     },
   }), [
-        publicKey,
-        solanaWallet,
-        disconnectSolana,
+
         evmIsConnected,
         evmAddress,
         disconnectEVM,
         evmSignMessage,
-        solanaSignMessage,
         MSG,
   ])
 

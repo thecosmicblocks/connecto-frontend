@@ -10,7 +10,6 @@ import { WagmiConfig }         from 'wagmi';
 import { EVMWalletModal }      from './components/EVMWalletModal';
 import { WalletModal }         from './components/WalletModal';
 import { wagmiConfig }         from './consts/wagmiConfig';
-import { SolanaWalletContext } from './context/SolanaWalletContext';
 import { WalletModalProvider } from './context/WalletContext';
 import "./globals.css";
 import { CommonContextProvider } from './context/CommonContext';
@@ -34,9 +33,9 @@ export default function RootLayout({
             <title>Connecto</title>
         </head>
         <body className={'w-full p-1 lg:px-9 xl:px-32'}>
+
         <ToastProvider>
             <WagmiConfig config={wagmiConfig}>
-                <SolanaWalletContext>
                     <Flowbite theme={{mode: 'dark', theme: themes}}>
                         <WalletModalProvider>
                             <CommonContextProvider>
@@ -51,7 +50,6 @@ export default function RootLayout({
                             </CommonContextProvider>
                         </WalletModalProvider>
                     </Flowbite>
-                </SolanaWalletContext>
             </WagmiConfig>
         </ToastProvider>
         <EVMWalletModal/>

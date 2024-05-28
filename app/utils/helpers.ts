@@ -1,8 +1,3 @@
-import { Wallet }  from '@solana/wallet-adapter-react'
-import {
-    Connection,
-    Transaction,
-}                  from '@solana/web3.js'
 import cookie      from 'react-cookies'
 import { STORAGE } from './constants'
 
@@ -46,17 +41,17 @@ export const subAddress = (address: string) => {
     return `${before}...${after}`
 }
 
-
-export async function confirmTransactionFromFrontend(connection: Connection, encodedTransaction: WithImplicitCoercion<string> | {
-    [Symbol.toPrimitive](hint: 'string'): string
-}, wallet: { wallet?: Wallet | null; signTransaction: any }) {
-    const recoveredTransaction = Transaction.from(
-        Buffer.from(encodedTransaction, 'base64'),
-    )
-    const signedTx = await wallet.signTransaction(recoveredTransaction)
-    const confirmTransaction = await connection.sendRawTransaction(
-        signedTx.serialize(),
-    )
-    return confirmTransaction
-}
+//
+// export async function confirmTransactionFromFrontend(connection: Connection, encodedTransaction: WithImplicitCoercion<string> | {
+//     [Symbol.toPrimitive](hint: 'string'): string
+// }, wallet: { wallet?: Wallet | null; signTransaction: any }) {
+//     const recoveredTransaction = Transaction.from(
+//         Buffer.from(encodedTransaction, 'base64'),
+//     )
+//     const signedTx = await wallet.signTransaction(recoveredTransaction)
+//     const confirmTransaction = await connection.sendRawTransaction(
+//         signedTx.serialize(),
+//     )
+//     return confirmTransaction
+// }
 

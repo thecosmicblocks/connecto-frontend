@@ -2,16 +2,6 @@ import {
     Button,
     Modal
 }                        from 'flowbite-react'
-import {
-    useConnection,
-    useWallet,
-}                        from '@solana/wallet-adapter-react'
-import {
-    LAMPORTS_PER_SOL,
-    PublicKey,
-    SystemProgram,
-    Transaction,
-}                        from '@solana/web3.js'
 import React, {
     useEffect,
     useState,
@@ -35,15 +25,13 @@ export interface BuyModalProps {
 const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isSuccess, setSuccess ] = useState(false)
-    const {connection} = useConnection()
-    const {publicKey, sendTransaction} = useWallet()
     const sleep = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms))
     const toast = useToast()
     const transferSolToSeller = async (args: { encode: any }) => {
         const {encode: transaction} = args
         try {
-            const signature = await sendTransaction(transaction, connection)
-            return {...args, tx: signature}
+            // const signature = await sendTransaction(transaction, connection)
+            // return {...args, tx: signature}
         } catch (err) {
             throw err
         }
@@ -52,23 +40,23 @@ const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
     const getTransferEndcode = async (args: { price: any; seller: any }) => {
         const {price, seller} = args
         setIsLoading(true)
-        const latestBlockhash = await connection.getLatestBlockhash()
-        const transaction = new Transaction().add(
-            SystemProgram.transfer({
-                fromPubkey: publicKey as PublicKey,
-                toPubkey: new PublicKey(seller),
-                lamports: LAMPORTS_PER_SOL * price,
-                //@ts-ignore
-                latestBlockhash: latestBlockhash.blockhash,
-            }),
-        )
-        return {...args, encode: transaction}
+        // const latestBlockhash = await connection.getLatestBlockhash()
+        // const transaction = new Transaction().add(
+        //     SystemProgram.transfer({
+        //         // fromPubkey: publicKey as PublicKey,
+        //         toPubkey: new PublicKey(seller),
+        //         lamports: LAMPORTS_PER_SOL * price,
+        //         //@ts-ignore
+        //         latestBlockhash: latestBlockhash.blockhash,
+        //     }),
+        // )
+        // return {...args, encode: transaction}
     }
 
     const verifyTransaction = async (args: { tx: any; price: any }) => {
         const {tx, price} = args
         await sleep(5000)
-        const {context: {slot}} = await connection.confirmTransaction(tx, 'finalized')
+        // const {context: {slot}} = await connection.confirmTransaction(tx, 'finalized')
         try {
             await transferNFT({_id: item._id, tx})
             return {...args}
@@ -126,7 +114,7 @@ const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
                         <p
                             className={'text-center text-xl text-white font-semibold'}
                         >
-                            <span>{t('marketplace.buy.nft_name', {name: item.title})} </span>
+                            <span>{t('marketplace.buy.nft_name',  item.title)} </span>
                             -
                             <span> {numberFormatter(item.price)} SOL</span>
                         </p>
@@ -140,7 +128,7 @@ const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
                                 color="blue"
                                 onClick={onClose}
                                 isProcessing={isLoading}
-                                disabled={!publicKey}
+                                // disabled={!publicKey}
                             >
                                 {isLoading ? 'Buying...' :
                                     t('marketplace.buy.btn_buy')

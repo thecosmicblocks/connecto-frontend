@@ -33,6 +33,7 @@ export const EVMWalletList = ({
   const { open } = useWeb3Modal();
 
   const metamask = async () => {
+    // @ts-ignore
     if (typeof window.ethereum === 'undefined') {
       const metamaskAppDeepLink =
         'https://metamask.app.link/dapp/' +

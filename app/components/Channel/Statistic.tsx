@@ -19,6 +19,7 @@ export interface StatisticProps {
     };
 }
 
+const badgeStyle = 'justify-center items-center border h-20 w-36 gap-2'
 const Statistic = ({detail}: StatisticProps) => {
     return (
         <Card>
@@ -33,7 +34,7 @@ const Statistic = ({detail}: StatisticProps) => {
                         <Badge
                             size="xl"
                             color={'gray-500'}
-                            className={'items-center justify-center border h-20 w-72 gap-2'}
+                            className={badgeStyle}
                             icon={AiOutlineLike}
                         >
                             <span className={'md:ml-3'}>
@@ -48,7 +49,7 @@ const Statistic = ({detail}: StatisticProps) => {
                             size="xl"
                             color={'gray-500'}
                             icon={MdOutlinePublish}
-                            className={'  h-20 w-72  items-center justify-center border'}
+                            className={badgeStyle}
                         >
                             <span className={'ml-3'}>
                             {numberFormatter(detail?.numberPosts as unknown as number)}
@@ -61,14 +62,12 @@ const Statistic = ({detail}: StatisticProps) => {
                         <Badge
                             color={'white'}
                             icon={FaDonate}
-                            className={' h-20 w-72  items-center justify-center border'}
-                            size="xl"
+                            className={badgeStyle}
+                            size="lg"
                         >
-                            <div className={'flex flex-row justify-between items-stretch'}>
-                               <span className={'ml-3'}>
+                               <span className={'lg:ml-2'}>
                             {`${numberFormatter(detail?.amountDonate as unknown as number)} OPL`}
                                 </span>
-                            </div>
                         </Badge>
                     </div>
                 </Tooltip>
@@ -77,7 +76,7 @@ const Statistic = ({detail}: StatisticProps) => {
                         <Badge
                             size="lg"
                             color={'white'}
-                            className={'w-72 h-20 items-center justify-center border'}
+                            className={badgeStyle}
                             icon={BsFillCollectionFill}
                         >
                             <span className={'ml-3'}>

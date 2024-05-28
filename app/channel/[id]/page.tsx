@@ -27,11 +27,6 @@ import {
     numberFormatter
 }                                    from '@app/utils/helpers'
 import DonateModel                   from '@app/components/Channel/DonateModel';
-import {
-    useConnection,
-    useWallet
-}                                    from '@solana/wallet-adapter-react';
-import axios                         from 'axios';
 import Statistic                     from '@app/components/Channel/Statistic'
 import { ChannelDetail }             from "@app/types/Channel";
 import SocialList                    from "@app/components/SocialList";
@@ -41,7 +36,18 @@ import {
     Tooltip
 }                                    from 'flowbite-react'
 import { useToast }                  from "@app/hooks/useToast";
-import { t } from '@app/utils/common'
+import { t }                     from '@app/utils/common'
+import { useWalletModalContext } from "@app/context/WalletContext";
+import {
+    Address,
+    useContractRead
+} from "wagmi";
+import {
+    connectoProtocolAbi,
+    useWriteConnectoProtocolDonate
+} from "@/Connecto-smart-contract-sdk";
+import { CONTRACT_ADDRESS }          from "@app/utils/constants";
+import { ethers }                    from "ethers";
 
 function DetailChannel() {
     const router = useRouter();
@@ -52,10 +58,11 @@ function DetailChannel() {
     const [ isUserSubscribed, setSubscribed ] = useState(false);
     const [ isOpen, setOpen ] = useState(false);
     const [ isLoading, setIsLoading ] = useState(false);
-    const {connection} = useConnection();
-    const {publicKey, sendTransaction} = useWallet();
     const id = params.id as string
     const toast = useToast(5000);
+    const walletContext = useWalletModalContext();
+
+    const selectedWalletMetadata = walletContext.selectedWalletMetadata;
 
     const userSubscribeChannel = async () => {
         if (!userInfo?.user?.walletAddress) {
@@ -88,55 +95,21 @@ function DetailChannel() {
     }, [ id ]);
 
     const donateForIdol = async (args: { encode: any }) => {
-        const {encode: transaction} = args;
         try {
-            const signature = await sendTransaction(transaction, connection);
-            return {...args, tx: signature};
+            useWriteConnectoProtocolDonate()
         } catch (err) {
+            console.log(err)
             throw err
         }
     };
 
     const sleep = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms));
-    const getDonateEndcode = async (args: { donate: any }) => {
-        const {donate} = args;
-        setIsLoading(true);
-        //TODO
-        const latestBlockhash = await connection.getLatestBlockhash();
-        // const transaction = new Transaction().add(
-        //     SystemProgram.transfer({
-        //         fromPubkey: publicKey,
-        //         toPubkey: new PublicKey(detailChannel.donateReceiver),
-        //         lamports: LAMPORTS_PER_SOL * donate,
-        //         latestBlockhash: latestBlockhash.blockhash,
-        //     })
-        // );
-        return {...args, encode: {}};
-    };
 
-    const verifyTransaction = async (args: { tx: any; donate: any }) => {
-        const {tx, donate} = args;
-        await sleep(5000);
-        const {context: {slot}} = await connection.confirmTransaction(tx, 'finalized');
-        try {
-            await donateChannel(detailChannel._id, {tx, amount: Number(donate)});
-            return {...args, confirm: slot};
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    const notifyDonate = (args: { donate: any }) => {
-        setTimeout(() => {
-            setIsLoading(false);
-            toast('success', t('channel.donate_success', args?.donate));
-        }, 1000);
-    };
 
     // @ts-ignore: any
     const donateForChannel = async (donate) => {
         try {
-            await compose(notifyDonate, verifyTransaction, donateForIdol, getDonateEndcode)(donate);
+            await compose(donateForIdol)(donate);
         } catch (error) {
             setIsLoading(false);
 
@@ -145,14 +118,14 @@ function DetailChannel() {
     };
 
     const handleDonate = () => {
-        publicKey && setOpen(!isOpen);
-        !publicKey &&
+        selectedWalletMetadata?.isConnected && setOpen(!isOpen);
+        !selectedWalletMetadata?.isConnected &&
         toast('error' ,t('please_connect_wallet'));
     };
 
     const donateTooltip = useMemo(() => {
-        return publicKey ? "Donate for Idol" : 'Please connecto your wallet';
-    }, [ publicKey ]);
+        return selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress ? "Donate for Idol" : 'Please connecto your wallet';
+    }, [ selectedWalletMetadata ]);
 
     const subscribeChannelLabel = useMemo(() => {
         return isUserSubscribed ? "Subscribed" : "Subscribed";
@@ -163,9 +136,9 @@ function DetailChannel() {
             <Head>
                 <title>{detailChannel.name}</title>
             </Head>
-            <div className={'mt-20 flex-row text-white md:flex gap-2'}>
+            <div className={'mt-20 grid grid-flow-row-dense grid-cols-3 text-white gap-1'}>
                 <article
-                    className="md:w-3/4"
+                    className="items-center justify-center xl:gap-4 col-span-3 lg:col-span-2"
                 >
                     <h2 className={'text-2xl md:text-3xl '}>{detailChannel.channelName}</h2>
                     <div className={'flex md:flex-col'}>
@@ -225,7 +198,7 @@ function DetailChannel() {
                                             className={'items-center justify-center  px-[5px] py-[8px] md:px-[10px] md:py-[15px] font-extrabold uppercase'}
                                             onClick={handleDonate}
                                             isProcessing={isLoading}
-                                            disabled={!publicKey}
+                                            disabled={!(selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress)}
                                             color={'red'}
                                         >
                                             Donate
@@ -268,7 +241,7 @@ function DetailChannel() {
                         channelId={detailChannel._id}
                     />
                 </article>
-                <div className={'mt-20 md:w-1/5'}>
+                <div className={'mt-20 col-span-3 lg:col-span-1'}>
                     <Card className={'p-1 w-full'}>
                         <SocialList detail={detailChannel}/>
                     </Card>

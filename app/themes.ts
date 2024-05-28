@@ -378,7 +378,7 @@ export const themes: CustomFlowbiteTheme = {
             "children": "flex h-full flex-col justify-center gap-4 p-6 w-full",
             "horizontal": {
                 "off": "flex-col",
-                "on": "flex-col md:flex-row"
+                "on": "flex-col lg:flex-row"
             },
             "href": "hover:bg-gray-100 dark:hover:bg-gray-700"
         },
@@ -386,7 +386,7 @@ export const themes: CustomFlowbiteTheme = {
             "base": "",
             "horizontal": {
                 "off": "rounded-t-lg",
-                "on": "h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-l-lg lg:w-80"
+                "on": "h-96 w-full rounded-t-lg object-cover md:h-auto lg:w-48 md:rounded-none md:rounded-l-lg lg:w-80"
             }
         }
     },
@@ -443,6 +443,14 @@ export const themes: CustomFlowbiteTheme = {
         "toggle": {
             "base": "-m-1.5 ml-auto inline-flex h-8 w-8 rounded-lg bg-white p-1.5 text-gray-800 hover:bg-gray-50 hover:text-gray-500 focus:ring-2 focus:ring-gray-300 dark:text-gray-800 dark:hover:bg-gray-300 dark:hover:text-black",
             "icon": "h-5 w-5 shrink-0"
+        }
+    },
+    popover:{
+        "base": "absolute z-20 inline-block w-max max-w-[100vw] bg-white outline-none border border-gray-200 rounded-lg shadow-sm dark:border-gray-600 dark:bg-gray-800",
+        "content": "z-10 overflow-hidden rounded-[7px]",
+        "arrow": {
+            "base": "absolute h-2 w-2 z-0 rotate-45 mix-blend-lighten bg-white border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:mix-blend-color",
+            "placement": "-4px"
         }
     }
 }

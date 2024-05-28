@@ -5,7 +5,10 @@ import React, {
     useState
 }                               from 'react'
 import Head                     from 'next/head'
-import { getDetailChannel }     from '@app/services';
+import {
+    getDetailChannel,
+    getMetadata
+} from '@app/services';
 import { getChannelCollection } from '@app/services/inventoryService';
 import { getUserInfo }          from '@app/utils/helpers';
 import CollectionList           from '@app/components/Inventory/CollectionList';
@@ -31,8 +34,8 @@ function ChannelCollections() {
             if (userInfo && userInfo.accessToken) {
                 const {items} = await getChannelCollection(params.id);
                 const data = await Promise.all(
-                    items.map(async (_item: { metadata_uri: string; reward_data: any[]; }) => {
-                        const resp = await axios.get(_item.metadata_uri)
+                    items.map(async (_item: { metadata_uri: string; reward_data: any[]; address: string }) => {
+                        const resp = await getMetadata(_item.address, '0')
                         return {
                             ..._item,
                             reward_data: _item?.reward_data?.[0],
