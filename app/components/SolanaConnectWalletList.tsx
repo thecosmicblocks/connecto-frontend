@@ -34,7 +34,7 @@ export const SolanaConnectWalletDialog = ({
   onClose: () => void
 }) => {
   const { wallets, select } = useWallet();
-
+  
   const [detected, undetected] = useMemo(() => {
     const detected: Wallet[] = [];
     const undetected: Wallet[] = [];
@@ -50,7 +50,7 @@ export const SolanaConnectWalletDialog = ({
     }
     return [detected, undetected];
   }, [wallets]);
-
+  
   return(
     <List unstyled className="flex grow flex-col gap-5 pl-5">
       {detected.map((wallet) => (
@@ -71,6 +71,6 @@ export const SolanaConnectWalletDialog = ({
           <WalletListItem icon={wallet?.adapter?.icon} name={"Install "  + wallet?.adapter?.name} />
         </List.Item>
       ))}
-    </List>   
+    </List>
   )
 }

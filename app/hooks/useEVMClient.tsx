@@ -26,11 +26,14 @@ export const useEVMClient = () => {
 
     const signMessage = async (msg: string): Promise<string | undefined> => {
         if (!isConnected) return;
-    
-        return await window.ethereum.request({
-            method: "personal_sign",
-            params: [msg, address],
-        });
+        try {
+          return await window.ethereum.request({
+              method: "personal_sign",
+              params: [msg, address],
+          });
+        } catch (error) {
+            disconnect()
+        }
     }
 
     return {

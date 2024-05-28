@@ -108,24 +108,22 @@ const LeftMenu = ({
 export const WalletModal = () => {
     const walletContext  = useWalletModalContext();
     const MenuWalletList = {
-        [CHAIN_TYPE.SOLANA]: SolanaConnectWalletDialog,
+        [CHAIN_TYPE.SOLANA]: () => <></>, // SolanaConnectWalletDialog,
         [CHAIN_TYPE.EVM]: EVMWalletList,
     }
     const RightMenuContent      = MenuWalletList[walletContext.walletChainType];
-    
-  console.log(walletContext.isOpen);
     
     return (
         <Modal show={walletContext.isOpen} onClose={() => walletContext.setIsOpen(false)}>
             <Modal.Header></Modal.Header>
             <Modal.Body>
                 <div className="flex flex-wrap flex-col md:flex-row">
-                    <LeftMenu
-                        onClick={(chain: ChainTypeValue) => {
-                            walletContext.setWalletChainType(chain)
-                        }}
-                    />
-                    <div className="mt-5 md:mt-0">
+                    {/*<LeftMenu*/}
+                    {/*    onClick={(chain: ChainTypeValue) => {*/}
+                    {/*        walletContext.setWalletChainType(chain)*/}
+                    {/*    }}*/}
+                    {/*/>*/}
+                    <div className="mt-5 w-full md:mt-0">
                         <RightMenuContent
                             onClose={() => {
                                 walletContext.setSelectedWalletChainType(walletContext.walletChainType)

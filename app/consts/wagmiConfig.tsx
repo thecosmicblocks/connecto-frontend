@@ -5,27 +5,13 @@ import {
   w3mConnectors,
   w3mProvider,
 } from '@web3modal/ethereum';
-import { Chain } from 'viem/chains';
 import { configureChains, createConfig } from 'wagmi';
+import { opal } from './wagmiChain';
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
-export const polygonAmoy: Chain = {
-  id: 80_002,
-  name: 'Polygon Amoy',
-  network: 'maticmum',
-  nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc-amoy.polygon.technology/'],
-    },
-    public: {
-      http: ['https://rpc-amoy.polygon.technology/'],
-    },
-  }
-}
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [polygonAmoy],
+  [opal],
   [w3mProvider({ projectId })]
 );
 

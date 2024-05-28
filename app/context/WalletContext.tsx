@@ -38,7 +38,7 @@ const defaultValue: DefaultWalletContext = {
   setIsOpen: (_isOpen: boolean) => { },
   step: "CHOOSE_A_NETWORK",
   setStep: (_step: CONNECT_WALLET_STEP) => { },
-  walletChainType: CHAIN_TYPE.SOLANA,
+  walletChainType: CHAIN_TYPE.EVM,
   setWalletChainType: (_type: ChainTypeValue) => {},
   isLoggedIn: false,
   setIsLoggedIn: (_isLoggedIn: boolean) => {},
