@@ -1,16 +1,17 @@
-import { useTranslation } from 'next-i18next'
 import React, {
     useEffect,
     useRef,
     useState,
-}                         from 'react'
-import { Processing }     from "@app/components/Processing";
+}                     from 'react'
+import { Processing } from "@app/components/Processing";
 import {
     Button,
     Modal,
     Select,
     TextInput
-} from "flowbite-react";
+}                     from "flowbite-react";
+import { t }          from '@app/utils/common'
+import { useToast }   from "@app/hooks/useToast";
 
 export interface ListingModalProps {
     isOpen: boolean;
@@ -21,12 +22,11 @@ export interface ListingModalProps {
 }
 
 const ListingModal = ({isOpen, setOpen, onConfirm, listingItem}: ListingModalProps) => {
-    const {t} = useTranslation('common')
     const [ price, setPrice ] = useState(0)
     const [ item, setItem ] = useState()
     const [ isLoading, setLoading ] = useState(false)
     const inputPrice = useRef()
-
+    const toast = useToast()
     const callback = () => {
         setLoading(false)
         setOpen(false)
@@ -38,13 +38,7 @@ const ListingModal = ({isOpen, setOpen, onConfirm, listingItem}: ListingModalPro
 
     const onClose = () => {
         setLoading(true)
-        // TODO
-        // !price && toast({
-        //     title: t('modal.listing.required_amount'),
-        //     status: 'error',
-        //     isClosable: true,
-        //     position: 'top',
-        // })
+        !price && toast('error', t('modal.listing.required_amount'))
         !price && setLoading(false)
         //@ts-ignore
         !price && inputPrice.current.focus()

@@ -6,8 +6,9 @@ import { FaDonate }             from 'react-icons/fa'
 import { MdOutlinePublish }     from 'react-icons/md'
 import {
     Badge,
+    Card,
     Tooltip
-}                               from "flowbite-react";
+} from "flowbite-react";
 
 export interface StatisticProps {
     detail: {
@@ -20,10 +21,10 @@ export interface StatisticProps {
 
 const Statistic = ({detail}: StatisticProps) => {
     return (
-        <>
-            <div className="flex border-b-2">
+        <Card>
+            <div className="block w-full">
                 <h3
-                    className={'px-4 text-2xl'}
+                    className={'flex px-4 text-2xl'}
                 >STATISTICS</h3>
             </div>
             <div className={'mt-8 w-full grid grid-flow-row  md:grid-cols-4 gap-3 gap-y-3'}>
@@ -86,7 +87,7 @@ const Statistic = ({detail}: StatisticProps) => {
                     </div>
                 </Tooltip>
             </div>
-        </>
+        </Card>
     )
 }
 

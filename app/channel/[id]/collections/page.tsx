@@ -5,32 +5,31 @@ import React, {
     useState
 }                               from 'react'
 import Head                     from 'next/head'
-import { useRouter }            from 'next/router';
 import { getDetailChannel }     from '@app/services';
 import { getChannelCollection } from '@app/services/inventoryService';
 import { getUserInfo }          from '@app/utils/helpers';
 import CollectionList           from '@app/components/Inventory/CollectionList';
 import axios                    from 'axios';
-import { useTranslation }       from 'next-i18next';
 import { ChannelDetail }        from "@app/types/Channel";
+import { useParams } from "next/navigation";
+import { t }         from '@app/utils/common'
 
 function ChannelCollections() {
-    const {t} = useTranslation()
-    const router = useRouter();
+    const params = useParams()
     const [ detailChannel, setDetail ] = useState<ChannelDetail>();
     const [ isLoading, setIsLoading ] = useState(true);
     const [ collectionData, setCollectionData ] = useState([])
-
+    const id = params.id
     const onFetchCollection = useCallback(() => {
         const userInfo = getUserInfo()
 
         const getDetail = async () => {
-            const res = await getDetailChannel(router.query.id);
+            const res = await getDetailChannel(params.id);
             setDetail(res);
         }
         const getCollection = async () => {
             if (userInfo && userInfo.accessToken) {
-                const {items} = await getChannelCollection(router.query.id);
+                const {items} = await getChannelCollection(params.id);
                 const data = await Promise.all(
                     items.map(async (_item: { metadata_uri: string; reward_data: any[]; }) => {
                         const resp = await axios.get(_item.metadata_uri)
@@ -51,11 +50,11 @@ function ChannelCollections() {
             setIsLoading(false)
         }
 
-        if (router.query?.id) {
+        if (id) {
             combineFunction().then(r => {
             })
         }
-    }, [ router.query?.id ])
+    }, [ id ])
 
     useEffect(() => {
         onFetchCollection()
@@ -68,7 +67,7 @@ function ChannelCollections() {
                 <title>{detailChannel?.name} {t('menu.collection')}</title>
             </Head>
 
-            <div className="container">
+            <div className="container mt-20">
                 {
                     <>
                         <CollectionList data={collectionData} onFetchCollection={onFetchCollection}/>

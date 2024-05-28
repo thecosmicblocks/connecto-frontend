@@ -4,7 +4,6 @@ import React, {
     useEffect,
     useState
 }                                      from 'react'
-import { useTranslation }              from 'next-i18next'
 import {
     getUserInfo,
     saveUserInfo
@@ -16,10 +15,9 @@ import {
     Label
 }                                      from "flowbite-react";
 import { useToast }                    from "@app/hooks/useToast";
-
+import { t } from '@app/utils/common'
 
 function Profile() {
-    const {t} = useTranslation()
     const userInfo = getUserInfo()
     const toast = useToast(4000)
     const [ refresh, setRefresh ] = useState(0)

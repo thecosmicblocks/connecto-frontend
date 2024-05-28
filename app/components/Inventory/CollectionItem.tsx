@@ -12,7 +12,6 @@ import {
 }                                         from '@solana/wallet-adapter-react'
 import { FaAngleDown }                    from 'react-icons/fa'
 import classNames                         from 'classnames'
-import { useTranslation }                 from 'next-i18next'
 import {
     Avatar,
     Button,
@@ -21,7 +20,7 @@ import {
     Tooltip
 }                                         from "flowbite-react";
 import { useToast }                       from "@app/hooks/useToast";
-
+import { t } from '@app/utils/common'
 interface CollectionItemProps {
     data: {
         _id: string,
@@ -59,7 +58,6 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
     const [ isOpenModal, setIsOpenModal ] = useState(false)
     const [ isLoadingTransaction, setIsLoadingTransaction ] = useState(false)
     const [ isExpanded, setIsExpanded ] = useState(true)
-    const {t} = useTranslation()
 
     const {connection} = useConnection()
     const {wallet, signTransaction} = useWallet();
@@ -167,7 +165,7 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
             <Modal onClose={onCloseModal}>
                 <Modal.Header>
                     <h3>
-                        {t([ 'inventory.confirm', 'inventory.exchange' ])}
+                        {t('inventory.exchange')}
                     </h3>
                 </Modal.Header>
 

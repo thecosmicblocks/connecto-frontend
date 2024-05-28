@@ -2,16 +2,16 @@
 import React, {
     useEffect,
     useState
-}                          from 'react';
-import NftItem             from '../components/marketplace/NftItem';
-import { PAGE_SIZE }       from '@app/utils/constants';
-import { marketOrders }    from '@app/services';
-import { useTranslation }  from 'next-i18next';
+}                       from 'react';
+import NftItem          from '../components/marketplace/NftItem';
+import { PAGE_SIZE }    from '@app/utils/constants';
+import { marketOrders } from '@app/services';
+
 import Head                from 'next/head';
 import { LoadingSkeleton } from "@app/components/LoadingSkeleton";
+import { t }            from '@app/utils/common'
 
 const Marketplace = () => {
-    const {t} = useTranslation('common');
     const [ nfts, setNfts ] = useState([]);
     const [ totalPage, setTotalPage ] = useState(0);
     const [ isLoading, setLoading ] = useState(true);

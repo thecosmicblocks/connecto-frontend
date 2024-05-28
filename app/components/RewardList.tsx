@@ -1,5 +1,4 @@
 import EmptyMsg           from './EmptyMessage'
-import { useTranslation } from "next-i18next";
 import { Card }           from "flowbite-react";
 import dayjs              from "dayjs";
 
@@ -9,9 +8,9 @@ type NFTProfileProps = {
     } | any[]
     className?: string
 }
+import {t} from '@app/utils/common'
 export default function NFTProfile({data, className = ''}: NFTProfileProps) {
     const _data = Array.isArray(data) ? data : []
-    const {t} = useTranslation()
 
     return (
         <>

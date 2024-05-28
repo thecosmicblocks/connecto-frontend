@@ -43,7 +43,7 @@ export default function RootLayout({
                                 <WalletModal/>
                                 <Header>
                                 </Header>
-                                <div className={'min-h-[70vh] w-full' }>
+                                <div className={'min-h-[70vh] w-full p-1' }>
                                     {children}
                                 </div>
                                 <GFooter></GFooter>

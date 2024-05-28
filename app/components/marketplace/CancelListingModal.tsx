@@ -1,14 +1,15 @@
 import {
     Button,
     Modal,
-}                         from 'flowbite-react'
-import { useTranslation } from 'next-i18next'
+} from 'flowbite-react'
+
 import React, {
     useEffect,
     useState,
-}                         from 'react'
-import { Processing }     from "@app/components/Processing";
-import { useToast }       from "@app/hooks/useToast";
+}                     from 'react'
+import { Processing } from "@app/components/Processing";
+import { useToast }   from "@app/hooks/useToast";
+import { t }          from '@app/utils/common'
 
 export interface CancelListingModalProps {
     isOpen: boolean;
@@ -19,7 +20,6 @@ export interface CancelListingModalProps {
 }
 
 const CancelListingModal = ({isOpen, setOpen, onConfirm, listingItem, parentCancel}: CancelListingModalProps) => {
-    const {t} = useTranslation('common')
     const [ item, setItem ] = useState()
     const [ isLoading, setLoading ] = useState(false)
     const toast = useToast()

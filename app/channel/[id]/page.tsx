@@ -30,7 +30,6 @@ import {
     useConnection,
     useWallet
 }                                    from '@solana/wallet-adapter-react';
-import { useTranslation }            from 'next-i18next';
 import axios                         from 'axios';
 import Statistic                     from '@app/components/Channel/Statistic'
 import { ChannelDetail }             from "@app/types/Channel";
@@ -41,6 +40,7 @@ import {
     Tooltip
 }                                    from 'flowbite-react'
 import { useToast }                  from "@app/hooks/useToast";
+import { t } from '@app/utils/common'
 
 function DetailChannel() {
     const router = useRouter();
@@ -53,7 +53,6 @@ function DetailChannel() {
     const [ isLoading, setIsLoading ] = useState(false);
     const {connection} = useConnection();
     const {publicKey, sendTransaction} = useWallet();
-    const {t} = useTranslation('common');
     const id = params.id as string
     const toast = useToast(5000);
 
@@ -129,7 +128,7 @@ function DetailChannel() {
     const notifyDonate = (args: { donate: any }) => {
         setTimeout(() => {
             setIsLoading(false);
-            toast('success', t('channel.donate_success', {donate: args?.donate}));
+            toast('success', t('channel.donate_success', args?.donate));
         }, 1000);
     };
 
@@ -155,7 +154,7 @@ function DetailChannel() {
     }, [ publicKey ]);
 
     const subscribeChannelLabel = useMemo(() => {
-        return t(isUserSubscribed ? "Subscribed" : "Subscribed");
+        return isUserSubscribed ? "Subscribed" : "Subscribed";
     }, [ isUserSubscribed ]);
 
     return (
@@ -167,7 +166,7 @@ function DetailChannel() {
                 <article
                     className="md:w-3/4"
                 >
-                    <h2 className={'text-2xl md:text-3xl'}>{detailChannel.channelName}</h2>
+                    <h2 className={'text-2xl md:text-3xl '}>{detailChannel.channelName}</h2>
                     <div className={'flex md:flex-col'}>
                         <Card className="mt-10 w-full" imgSrc={detailChannel.avatarUrl} horizontal>
                             <h3 className={'text-2xl'}> {detailChannel.channelName}</h3>

@@ -1,13 +1,14 @@
-import { useTranslation } from 'next-i18next'
 import React, {
     useRef,
     useState,
-}                         from 'react'
+}                   from 'react'
 import {
     Button,
     Modal,
     TextInput
-} from "flowbite-react";
+}                   from "flowbite-react";
+import { t }        from '@app/utils/common'
+import { useToast } from "@app/hooks/useToast";
 
 export interface DonateModalProps {
     isOpen: boolean;
@@ -16,16 +17,12 @@ export interface DonateModalProps {
 }
 
 const DonateModal = ({ isOpen, setOpen, onConfirm }: DonateModalProps) => {
-    const { t } = useTranslation('common')
     const [donate, setDonate] = useState(0)
     const inputDonate = useRef()
+    const toast = useToast(4000)
     const onClose = () => {
-        // !donate && toast({
-        //     title: t('modal.donate.required_amount'),
-        //     status: 'error',
-        //     isClosable: true,
-        //     position: 'top',
-        // })
+        !donate && toast('error', t('modal.donate.required_amount'))
+
         //@ts-ignore
         !donate && inputDonate.current.focus()
         donate && setOpen(!isOpen)

@@ -1,6 +1,6 @@
 import get from 'lodash.get'
 
-export const t = (key: string, text?: any) => {
+export const t = (key: string, text = '') => {
     const object = {
         "header": "Connecto",
         "top": {
@@ -135,5 +135,9 @@ export const t = (key: string, text?: any) => {
             }
         }
     }
-    return get(object, key, key) + ' ' + text
+    let value = get(object, key, '')
+    if (text) {
+        value = value.concat(' ', text)
+    }
+    return value
 }

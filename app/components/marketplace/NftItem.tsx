@@ -1,5 +1,5 @@
 import { subAddress, }     from '@app/utils/helpers'
-import { useTranslation }  from 'next-i18next'
+import {t} from '@app/utils/common'
 import React, { useState } from 'react'
 import BuyModal            from './BuyModal'
 import {
@@ -15,7 +15,6 @@ export interface NftItemProps {
 
 const NftItem = ({item}: NftItemProps) => {
     const [ isOpen, setOpen ] = useState(false)
-    const {t} = useTranslation('common')
 
     return (
         <>

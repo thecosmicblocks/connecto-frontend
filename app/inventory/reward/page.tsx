@@ -1,18 +1,17 @@
 'use client'
-import Head                       from "next/head";
-import RewardItem                 from "@app/components/RewardList";
+import Head                 from "next/head";
+import RewardItem           from "@app/components/RewardList";
 import {
     useCallback,
     useEffect,
     useState
-}                                 from "react";
-import { getRewardHistory }       from '@app/services/inventoryService'
-import { getUserInfo }            from "@app/utils/helpers";
-import { useTranslation }         from "next-i18next";
-import { LoadingSkeleton }        from "@app/components/LoadingSkeleton";
+}                           from "react";
+import { getRewardHistory } from '@app/services/inventoryService'
+import { getUserInfo }      from "@app/utils/helpers";
+import { LoadingSkeleton }  from "@app/components/LoadingSkeleton";
+import { t }                from '@app/utils/common'
 
 export default function MyInventory() {
-    const {t} = useTranslation('common')
 
     const [ rewardHistory, setRewardHistory ] = useState([])
     const [ isLoading, setIsLoading ] = useState(true)

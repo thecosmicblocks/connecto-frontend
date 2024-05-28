@@ -1,9 +1,8 @@
-import { useTranslation } from 'next-i18next'
 import React from 'react'
 import { TbMoodEmpty } from 'react-icons/tb'
+import { t } from '@app/utils/common'
 
 function EmptyMsg() {
-    const { t } = useTranslation()
 
     return (
         <div className="text-4xl">

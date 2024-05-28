@@ -10,7 +10,6 @@ import {
     useWallet,
 }                                         from '@solana/wallet-adapter-react'
 import axios                              from 'axios'
-import { useTranslation }                 from 'next-i18next'
 import React, {
     useMemo,
     useState,
@@ -18,13 +17,13 @@ import React, {
 import CancelListingModal                 from './CancelListingModal'
 import { Button }                         from "flowbite-react";
 import { useToast }                       from "@app/hooks/useToast";
+import { t } from '@app/utils/common'
 
 export interface ListingItemProps {
     data: any;
 }
 
 const ListingItem = ({data}: ListingItemProps) => {
-    const {t} = useTranslation()
     const [ isOpen, setOpen ] = useState(false)
     const [ isOpenCancel, setOpenCancel ] = useState(false)
     const [ isLoading, setLoading ] = useState(false)

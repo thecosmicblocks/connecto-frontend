@@ -9,10 +9,9 @@ import CollectionList        from '@app/components/Inventory/CollectionList';
 import { getUserInfo }       from '@app/utils/helpers';
 import { getUserCollection } from '@app/services/inventoryService'
 import axios                 from 'axios';
-import { useTranslation }    from 'next-i18next';
+import { t } from '@app/utils/common'
 
 function Collection() {
-    const {t} = useTranslation('common')
 
     const [ collectionData, setCollectionData ] = useState([])
     const [ isLoading, setIsLoading ] = useState(true)

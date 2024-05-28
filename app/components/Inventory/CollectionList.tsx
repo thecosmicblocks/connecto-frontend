@@ -9,7 +9,7 @@ type CollectionListProps = {
 
 function CollectionList({data, onFetchCollection}: CollectionListProps) {
     return (
-        <div>
+        <div className={'text-white'}>
             {
                 Array.isArray(data) && data.length > 0 ? (
                     <>
