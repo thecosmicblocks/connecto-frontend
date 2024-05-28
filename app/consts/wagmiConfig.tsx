@@ -2,11 +2,15 @@
 
 import {
   EthereumClient,
-  w3mConnectors,
   w3mProvider,
-} from '@web3modal/ethereum';
-import { configureChains, createConfig } from 'wagmi';
-import { opal } from './wagmiChain';
+}                          from '@web3modal/ethereum';
+import { createConfig }    from 'wagmi';
+import { opal }            from './wagmiChain';
+import { configureChains } from "@wagmi/core";
+import {
+  fallback,
+  http
+}                          from "viem";
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 
@@ -16,13 +20,10 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 export const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({
-    projectId,
-    chains,
-  }),
-  publicClient,
-  webSocketPublicClient,
+  chains: [ opal ],
+  transports: {
+    [opal.id]: fallback([ http(opal.rpcUrls.default.http[0]) ]),
+  }
 });
 export const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
