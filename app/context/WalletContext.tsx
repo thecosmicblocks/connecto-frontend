@@ -58,7 +58,7 @@ const defaultValue: DefaultWalletContext = {
   setWalletChainType: (_type: ChainTypeValue) => {},
   isLoggedIn: false,
   setIsLoggedIn: (_isLoggedIn: boolean) => {},
-  selectedWalletChainType: undefined,
+  selectedWalletChainType: CHAIN_TYPE.EVM,
   setSelectedWalletChainType: (_type: ChainTypeValue | undefined) => { },
   walletMetadata: {},
   selectedWalletMetadata: undefined,
@@ -82,7 +82,7 @@ export const WalletModalProvider = ({
   const [walletChainType, setGlobalWalletChainType] = useState<ChainTypeValue>(defaultValue.walletChainType)
   const setWalletChainType = useCallback((_type: ChainTypeValue) => { setGlobalWalletChainType(_type as ChainTypeValue)}, [])
 
-  const [selectedWalletChainType, setGlobalSelectedWalletChainType] = useState<DefaultWalletContext['selectedWalletChainType']>(undefined)
+  const [selectedWalletChainType, setGlobalSelectedWalletChainType] = useState<DefaultWalletContext['selectedWalletChainType']>(defaultValue.selectedWalletChainType)
   const setSelectedWalletChainType = useCallback((_type: ChainTypeValue | undefined) => { setGlobalSelectedWalletChainType(_type as ChainTypeValue) }, [])
 
   const [isLoggedIn, setGlobalIsLoggedIn] = useState<boolean>(defaultValue.isLoggedIn)
