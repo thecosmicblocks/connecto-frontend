@@ -6,10 +6,8 @@ import {
     ThemeModeScript
 }                              from "flowbite-react";
 import type { Metadata }       from "next";
-import { WagmiProvider }         from 'wagmi';
-import { EVMWalletModal }      from './components/EVMWalletModal';
+// import { EVMWalletModal }      from './components/EVMWalletModal';
 import { WalletModal }         from './components/WalletModal';
-import { wagmiConfig }         from './consts/wagmiConfig';
 import { WalletModalProvider } from './context/WalletContext';
 import "./globals.css";
 import { CommonContextProvider } from './context/CommonContext';
@@ -17,6 +15,10 @@ import { ToastProvider }       from "@app/context/ToastContext";
 import { ToastContainer }      from "@app/components/Toast";
 import { ApolloContext } from './context/ApolloContext';
 import { TanstackContext } from './context/TanstackContext';
+import { WagmiContext } from './context/WagmiContext';
+import { headers } from 'next/headers'
+import { cookieToInitialState } from 'wagmi'
+import { wagmiConfig } from './consts/wagmiConfig';
 
 export const metadata: Metadata = {
     title: "Connecto",
@@ -28,6 +30,11 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const initialState = cookieToInitialState(
+        wagmiConfig,
+        headers().get('cookie')
+    )
+
     return (
         <html lang="en" suppressHydrationWarning>
         <head>
@@ -37,7 +44,7 @@ export default function RootLayout({
         <body className={'w-full p-1 lg:px-9 xl:px-32'}>
 
         <ToastProvider>
-            <WagmiProvider config={wagmiConfig}>
+            <WagmiContext initialState={initialState}>
                 <TanstackContext>
                     <Flowbite theme={{mode: 'dark', theme: themes}}>
                         <WalletModalProvider>
@@ -56,9 +63,9 @@ export default function RootLayout({
                         </WalletModalProvider>
                     </Flowbite>
                 </TanstackContext>
-            </WagmiProvider>
+            </WagmiContext>
         </ToastProvider>
-        <EVMWalletModal/>
+        {/* <EVMWalletModal/> */}
         </body>
         </html>
     );

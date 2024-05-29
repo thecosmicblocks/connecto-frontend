@@ -1,6 +1,6 @@
 "use client";
 
-import { useWeb3Modal } from "@web3modal/react";
+// import { useWeb3Modal } from "@web3modal/react";
 import { List } from "flowbite-react";
 import { useConnect } from "wagmi";
 import MetaMaskIcon from '../assets/images/svg/metamask.svg';
@@ -30,7 +30,7 @@ export const EVMWalletList = ({
     },
   ];
   const { connectors: evmConnectors, connect: connectMetaMask } = useConnect();
-  const { open } = useWeb3Modal();
+//   const { open } = useWeb3Modal();
 
   const metamask = async () => {
     // @ts-ignore
@@ -42,11 +42,11 @@ export const EVMWalletList = ({
       return;
     }
 
-    connectMetaMask({ connector: evmConnectors[1] });
+    connectMetaMask({ connector: evmConnectors[0] });
   };
 
   const walletconnect = async () => {
-    await open();
+    connectMetaMask({ connector: evmConnectors[1] });
   };
 
   const handleClick = async (connectType: ConnectType) => {

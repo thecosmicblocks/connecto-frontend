@@ -1,17 +1,15 @@
-"use client";
 
 import {
   EthereumClient,
   w3mProvider,
 }                          from '@web3modal/ethereum';
-import { createConfig }    from 'wagmi';
+import { createConfig, cookieStorage, createStorage }    from 'wagmi';
 import { opal }            from './wagmiChain';
 import { configureChains } from "@wagmi/core";
 import {
-  fallback,
   http,
 }                          from "viem";
-import { injected } from 'wagmi/connectors'
+import { injected, walletConnect } from 'wagmi/connectors'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 
@@ -22,10 +20,13 @@ const { chains } = configureChains(
 
 export const wagmiConfig = createConfig({
   chains: [ opal ],
-  connectors: [injected()],
+  connectors: [injected(), walletConnect({ projectId: projectId })],
   ssr: true,
+    storage: createStorage({
+        storage: cookieStorage,
+    }),
   transports: {
-    [opal.id]: fallback([ http(opal.rpcUrls.default.http[0]) ]),
+    [opal.id]: http(),
   },
 });
 export const ethereumClient = new EthereumClient(wagmiConfig, chains);
