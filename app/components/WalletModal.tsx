@@ -2,6 +2,7 @@
 
 import {
     Button,
+    Dropdown,
     List,
     Modal
 }                                from "flowbite-react";
@@ -24,36 +25,43 @@ export const ToggleWalletModalBtn = ({
     const is0x = selectedWalletMetadata?.address?.startsWith("0x");
 
     return selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress ? (
-        <Button
-            onClick={() => {
-                walletContext.setUserData(undefined);
-                walletContext.setSelectedWalletChainType(undefined);
-                selectedWalletMetadata?.disconnect();
-            }}
-            className={`${className}`}
-            color='gray'
-            type="button"
-            outline gradientDuoTone="pinkToOrange"
+        <span
+            className={clsx(className)}
         >
-            {
-                selectedWalletMetadata?.icon ? (
-                    <Image
-                        loading="lazy"
-                        width={20}
-                        height={20}
-                        src={selectedWalletMetadata?.icon}
-                        alt={walletContext?.selectedWalletChainType || ""}
-                        className="mr-1"
-                    />
-                ) : (
-                    <></>
-                )
-            }
-            <Center>
-                Disconnect {walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...
-                {walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}
-            </Center>
-        </Button>
+            <Dropdown
+                label={`Disconnect ${walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...${walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}`}
+                // onClick={() => {
+                //     walletContext.setUserData(undefined);
+                //     walletContext.setSelectedWalletChainType(undefined);
+                //     selectedWalletMetadata?.disconnect();
+                // }}
+                outline gradientDuoTone="pinkToOrange"
+            >
+                <Dropdown.Item>Dashboard</Dropdown.Item>
+                <Dropdown.Item>Settings</Dropdown.Item>
+                <Dropdown.Item>Earnings</Dropdown.Item>
+                <Dropdown.Divider/>
+                <Dropdown.Item>Separated link</Dropdown.Item>
+                {/*{*/}
+                {/*    selectedWalletMetadata?.icon ? (*/}
+                {/*        <Image*/}
+                {/*            loading="lazy"*/}
+                {/*            width={20}*/}
+                {/*            height={20}*/}
+                {/*            src={selectedWalletMetadata?.icon}*/}
+                {/*            alt={walletContext?.selectedWalletChainType || ""}*/}
+                {/*            className="mr-1"*/}
+                {/*        />*/}
+                {/*    ) : (*/}
+                {/*        <></>*/}
+                {/*    )*/}
+                {/*}*/}
+                {/*<Center>*/}
+                {/*    Disconnect {walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...*/}
+                {/*    {walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}*/}
+                {/*</Center>*/}
+            </Dropdown>
+        </span>
     ) : (
         <Button
             className={clsx('hover:background-none', className)}

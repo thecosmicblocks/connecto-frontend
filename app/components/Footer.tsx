@@ -13,7 +13,7 @@ export function GFooter() {
                 <div className="grid w-full justify-between lg:justify-center sm:flex md:flex md:grid-cols-1 lg:gap-96">
                     <div className={'xl::ml-20 align-middle'}>
                         <Footer.Brand
-                            href="https://marketplace.goswapshop.com"
+                            href={process.env.NEXT_PUBLIC_URL || '/'}
                             src="/images/logo.svg"
                             width={'300px'}
                             height={'400px'}
@@ -59,7 +59,7 @@ export function GFooter() {
                 <Footer.Divider/>
                 <div className="w-full justify-center max-sm:flex-col sm:flex sm:items-center sm:justify-between">
                     <div className={"flex justify-center"}>
-                        <Footer.Copyright href="#" by="Connecto™" year={2024}/>
+                        <Footer.Copyright href="https://thecosmicblock.com" by="The Cosmic Block Labs™" year={2024}/>
                     </div>
                     <div className="mt-3 flex justify-center space-x-6 sm:mt-0 sm:justify-center">
                         {/*<Footer.Icon href={process.env.NEXT_FB_URL || process.env.NEXT_PUBLIC_SITE_URL}*/}
