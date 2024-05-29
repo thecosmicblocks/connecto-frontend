@@ -12,7 +12,7 @@ import {
 }              from "flowbite-react";
 
 type SocialListProps = {
-    detail: {
+    detail?: {
         socialLinks?: {
             name: string;
             url: string;

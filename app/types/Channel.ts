@@ -25,4 +25,5 @@ export type ChannelDetail = {
     metadata?: any[]
     href?: string
     aboutMe:string
+    socialLinks?: any[]
 }   
