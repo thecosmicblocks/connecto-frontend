@@ -1,8 +1,8 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: '',
-    baseUrl: '',
+    basePath: '/',
+    baseUrl: 'connecto.thecosmicblock.com',
     images: {
       remotePatterns: [
         {
