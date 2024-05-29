@@ -3,51 +3,44 @@ import React, {
     useEffect,
     useMemo,
     useState
-}                                    from 'react'
-import { ProfileInfo }               from '@app/components/ListProfile'
+}                                         from 'react'
+import { ProfileInfo }                    from '@app/components/ListProfile'
 import {
     useParams,
     useRouter,
     useSearchParams
-}                                    from 'next/navigation'
-import { MOCK_DETAIL_PROFILE_DATA, } from '@app/utils/data'
-import classNames                    from 'classnames'
-import Head                          from 'next/head'
-import NFTProfile                    from '@app/components/NFTProfile'
-import ChannelPost                   from '@app/components/Channel/Post'
+}                                         from 'next/navigation'
+import { MOCK_DETAIL_PROFILE_DATA, }      from '@app/utils/data'
+import classNames                         from 'classnames'
+import Head                               from 'next/head'
+import NFTProfile                         from '@app/components/NFTProfile'
+import ChannelPost                        from '@app/components/Channel/Post'
 import {
-    donateChannel,
     getDetailChannel,
     getMetadata,
     subscribeChannel
-}                                    from '@app/services'
+}                                         from '@app/services'
 import {
-    compose,
     getUserInfo,
     numberFormatter
-}                                    from '@app/utils/helpers'
-import DonateModel                   from '@app/components/Channel/DonateModel';
-import Statistic                     from '@app/components/Channel/Statistic'
-import { ChannelDetail }             from "@app/types/Channel";
-import SocialList                    from "@app/components/SocialList";
+}                                         from '@app/utils/helpers'
+import DonateModel                        from '@app/components/Channel/DonateModel';
+import Statistic                          from '@app/components/Channel/Statistic'
+import { ChannelDetail }                  from "@app/types/Channel";
+import SocialList                         from "@app/components/SocialList";
 import {
     Button,
     Card,
     Tooltip
-}                                    from 'flowbite-react'
-import { useToast }                  from "@app/hooks/useToast";
-import { t }                     from '@app/utils/common'
-import { useWalletModalContext } from "@app/context/WalletContext";
-import {
-    Address,
-    useContractRead
-} from "wagmi";
-import {
-    connectoProtocolAbi,
-    useWriteConnectoProtocolDonate
-} from "@/Connecto-smart-contract-sdk";
-import { CONTRACT_ADDRESS }          from "@app/utils/constants";
-import { ethers }                    from "ethers";
+}                                         from 'flowbite-react'
+import { useToast }                       from "@app/hooks/useToast";
+import { t }                              from '@app/utils/common'
+import { useWalletModalContext }          from "@app/context/WalletContext";
+import { useWriteConnectoProtocolDonate } from "smartcontract-sdk";
+import { ethers }                         from "ethers";
+import { Address }                        from 'viem';
+import { NATIVE_TOKEN }                   from "@app/consts/wagmiChain";
+
 
 function DetailChannel() {
     const router = useRouter();
@@ -61,6 +54,7 @@ function DetailChannel() {
     const id = params.id as string
     const toast = useToast(5000);
     const walletContext = useWalletModalContext();
+    const {writeContractAsync} = useWriteConnectoProtocolDonate();
 
     const selectedWalletMetadata = walletContext.selectedWalletMetadata;
 
@@ -94,11 +88,22 @@ function DetailChannel() {
         getDetail && getDetail();
     }, [ id ]);
 
-    const donateForIdol = async (args: { encode: any }) => {
+    const donateForIdol = async (donate: number) => {
         try {
-            useWriteConnectoProtocolDonate()
+            console.log('donateForIdol', donate)
+            const donateAmount = ethers.utils.parseEther(donate.toString()).toBigInt();
+            const donateResp = await writeContractAsync({
+                address: "0xc7383EB2ebAa37953090BFde1f64e834fa6De0B5",
+                args: [
+                    detailChannel.donateReceiver as unknown as Address,
+                    NATIVE_TOKEN,
+                    donateAmount,
+                ],
+                value: donateAmount,
+            })
+            console.log(donateResp);
         } catch (err) {
-            console.log(err)
+            console.error('Donate errr', err)
             throw err
         }
     };
@@ -109,11 +114,13 @@ function DetailChannel() {
     // @ts-ignore: any
     const donateForChannel = async (donate) => {
         try {
-            await compose(donateForIdol)(donate);
+            console.log('donate', donate)
+            await donateForIdol(donate.donate);
         } catch (error) {
+            console.log('error: ', error)
             setIsLoading(false);
 
-            toast('error', t('donate_failed'));
+            toast('error', t('channel.donate_failed'));
         }
     };
 

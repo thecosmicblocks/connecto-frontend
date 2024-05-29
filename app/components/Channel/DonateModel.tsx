@@ -33,6 +33,7 @@ const DonateModal = ({ isOpen, setOpen, onConfirm }: DonateModalProps) => {
         <>
             <Modal
                 onClose={() => setOpen(!isOpen)}
+                show={isOpen}
             >
                     <Modal.Header color={'white'}>
                         <h4>Donate to idol</h4>
@@ -42,7 +43,6 @@ const DonateModal = ({ isOpen, setOpen, onConfirm }: DonateModalProps) => {
                             type="number"
                             borderRadius={'20px'}
                             borderWidth={'1px'}
-                            borderColor={'gray.300'}
                             bg={'white'}
                             //@ts-ignore
                             onChange={(e) => setDonate(e?.target?.value)}
