@@ -1,0 +1,1 @@
+cd Connecto-smart-contract-sdk && git pull origin master && cd ..
