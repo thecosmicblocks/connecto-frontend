@@ -18,9 +18,6 @@ const handleError = (errorName = '') => {
 
 export const useEVMClient = () => {
     const { disconnect } = useDisconnect({
-        onError(data) {
-        handleError(data.name);
-        },
     });
     const { isConnected, address, } = useAccount();
     console.log(isConnected, address)
