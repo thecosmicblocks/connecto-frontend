@@ -1,4 +1,4 @@
-import {Chain} from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const polygonAmoy: Chain = {
     id: 80_002,
@@ -33,3 +33,5 @@ export const opal: Chain = {
         },
     }
 }
+
+export const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
