@@ -3,63 +3,79 @@ import {
     Modal
 }                        from 'flowbite-react'
 import React, {
-    useEffect,
     useState,
 }                        from 'react'
-import { transferNFT }   from '@app/services'
 import {
     compose,
     numberFormatter,
 }                        from '@app/utils/helpers'
 import { Processing }    from "@app/components/Processing";
-import { FaCheckCircle } from "react-icons/fa";
 import { useToast }      from "@app/hooks/useToast";
 import { t }             from '@app/utils/common'
+import { useWriteConnectoMarketplaceBuy } from '@/Connecto-smart-contract-sdk';
+import { CONTRACT_ADDRESS, ListingType } from '@/app/utils/constants';
+import { useWalletModalContext } from '@/app/context/WalletContext';
+import { ethers } from 'ethers';
+import { publicClient } from '@/app/consts/wagmiConfig';
+import { buyOrder } from '@/app/services';
 
 export interface BuyModalProps {
     item: any;
     isOpen: boolean;
-    setOpen: (value: boolean) => void;
+    onClose: any;
 }
 
-const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
+const BuyModal = ({ item, isOpen, onClose }: BuyModalProps) => {
     const [ isLoading, setIsLoading ] = useState(false)
-    const [ isSuccess, setSuccess ] = useState(false)
-    const sleep = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms))
+    const { writeContractAsync } = useWriteConnectoMarketplaceBuy()
+    const { userData } = useWalletModalContext()
     const toast = useToast()
-    const transferSolToSeller = async (args: { encode: any }) => {
-        const {encode: transaction} = args
-        try {
-            // const signature = await sendTransaction(transaction, connection)
-            // return {...args, tx: signature}
-        } catch (err) {
-            throw err
-        }
+
+    const updateMarketItem = async ({ _id }: any) => {
+        await buyOrder(_id)
     }
 
-    const getTransferEndcode = async (args: { price: any; seller: any }) => {
-        const {price, seller} = args
-        setIsLoading(true)
-        // const latestBlockhash = await connection.getLatestBlockhash()
-        // const transaction = new Transaction().add(
-        //     SystemProgram.transfer({
-        //         // fromPubkey: publicKey as PublicKey,
-        //         toPubkey: new PublicKey(seller),
-        //         lamports: LAMPORTS_PER_SOL * price,
-        //         //@ts-ignore
-        //         latestBlockhash: latestBlockhash.blockhash,
-        //     }),
-        // )
-        // return {...args, encode: transaction}
-    }
-
-    const verifyTransaction = async (args: { tx: any; price: any }) => {
-        const {tx, price} = args
-        await sleep(5000)
-        // const {context: {slot}} = await connection.confirmTransaction(tx, 'finalized')
+    const sendBuyTransaction = async ({ 
+        signature,
+        price,
+        assetContract,
+        currencyAddress,
+        startTime,
+        endTime,
+        tokenId,
+        listingId,
+        seller,
+        _id
+    }: any) => {
         try {
-            await transferNFT({_id: item._id, tx})
-            return {...args}
+            const priceWDecimals = ethers.utils.parseEther(price);
+            const buyTxHash = await writeContractAsync({
+                address: CONTRACT_ADDRESS.DEVELOPMENT.UNIQUE_CONNECTO_MARKETPLACE,
+                args: [
+                    {
+                        listingId: listingId,
+                        tokenOwner: seller,
+                        assetContract: assetContract,
+                        tokenId: tokenId,
+                        startTime: startTime,
+                        endTime: endTime,
+                        currency: currencyAddress,
+                        reservePricePerToken: priceWDecimals.toBigInt(),
+                        buyoutPricePerToken: priceWDecimals.toBigInt(),
+                        listingType: ListingType.Direct,
+                    },
+                    userData.user.walletAddress,
+                    signature,
+                ],
+                value: priceWDecimals.toBigInt(),
+            })
+            await publicClient.waitForTransactionReceipt({
+                hash: buyTxHash
+            })
+            return {
+                txHash: buyTxHash,
+                _id: _id,
+            }
         } catch (err) {
             throw err
         }
@@ -67,22 +83,20 @@ const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
 
     const notificationAction = () => {
         setTimeout(() => {
-            setIsLoading(false)
             toast('success', t('marketplace.noti_buy_nft_success'))
         }, 1000)
     }
 
-    const onClose = async () => {
+    const onBuy = async () => {
         try {
             setIsLoading(true)
-            await compose(notificationAction, verifyTransaction, transferSolToSeller, getTransferEndcode)({...item})
-            setIsLoading(false)
-            setSuccess(true)
+            await compose(notificationAction, updateMarketItem, sendBuyTransaction)({...item})
+            onClose()
         } catch (error) {
-            await sleep(1500)
             console.log(error)
-            setIsLoading(false)
             toast('error', t('marketplace.noti_buy_nft_failed'))
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -96,48 +110,35 @@ const BuyModal = ({item, isOpen, setOpen}: BuyModalProps) => {
         )
     }
 
-    useEffect(() => {
-        return () => {
-            setSuccess(false)
-        }
-    }, [])
-
     return (
         <>
-            <Modal show={isOpen} onClose={() => onClose()}>
+            <Modal show={isOpen} onClose={onClose}>
                 <Modal.Header>{t('marketplace.buy.header')}</Modal.Header>
                 <Modal.Body>
                     <div className="justify-center">
-                        {isSuccess && (
-                            <FaCheckCircle color={'green'} height={16} width={16}></FaCheckCircle>
-                        )}
                         <p
-                            className={'text-center text-xl text-white font-semibold'}
+                            className={'text-center text-xl font-semibold text-white'}
                         >
-                            <span>{t('marketplace.buy.nft_name',  item.title)} </span>
-                            -
-                            <span> {numberFormatter(item.price)} SOL</span>
+                            <span>{t('marketplace.buy.nft_name').replace('{{name}}', item.title)} </span>
+                            <br />
+                            <span>Price: {numberFormatter(item.price)} $OPL</span>
                         </p>
                         <RenderProcess/>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    {
-                        !isSuccess ? (
-                            <Button
-                                color="blue"
-                                onClick={onClose}
-                                isProcessing={isLoading}
-                                // disabled={!publicKey}
-                            >
-                                {isLoading ? 'Buying...' :
-                                    t('marketplace.buy.btn_buy')
-                                }
-                            </Button>
-                        ) : ''
-                    }
                     <Button
-                        onClick={() => setOpen(!isOpen)}
+                        color="blue"
+                        onClick={onBuy}
+                        isProcessing={isLoading}
+                        // disabled={!publicKey}
+                    >
+                        {isLoading ? 'Buying...' :
+                            t('marketplace.buy.btn_buy')
+                        }
+                    </Button>
+                    <Button
+                        onClick={onClose}
                         disabled={isLoading}
                     >{t('modal.btn_cancel')}</Button>
                 </Modal.Footer>

@@ -1,5 +1,7 @@
 "use client"
 import React, {
+    Children,
+    useCallback,
     useEffect,
     useState
 }                       from 'react';
@@ -12,7 +14,7 @@ import { LoadingSkeleton } from "@app/components/LoadingSkeleton";
 import { t }            from '@app/utils/common'
 
 const Marketplace = () => {
-    const [ nfts, setNfts ] = useState([]);
+    const [ nfts, setNfts ] = useState<any[]>([]);
     const [ totalPage, setTotalPage ] = useState(0);
     const [ isLoading, setLoading ] = useState(true);
     const [ page, setPage ] = useState(1);
@@ -20,16 +22,17 @@ const Marketplace = () => {
 
     const sleep = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms));
 
+    const getActiveListings = useCallback(async () => {
+        const {data: {items, totalItems}} = await marketOrders({pageSize: size, pageIndex: page});
+        await sleep(1000);
+        setNfts(items);
+        setLoading(false);
+        setTotalPage(Math.ceil(totalItems / size));
+    }, [page, size]);
+
     useEffect(() => {
-        const getActiveListings = async () => {
-            const {data: {items, totalItems}} = await marketOrders({pageSize: size, pageIndex: page});
-            await sleep(1000);
-            setNfts(items);
-            setLoading(false);
-            setTotalPage(Math.ceil(totalItems / size));
-        };
-        getActiveListings && getActiveListings();
-    }, [ page, size ]);
+        getActiveListings();
+    }, [getActiveListings]);
 
     return (
         <>
@@ -40,8 +43,14 @@ const Marketplace = () => {
             <div>
                 <main className="mt-10 flex flex-col bg-gray-800">
                     <LoadingSkeleton isLoading={isLoading}></LoadingSkeleton>
-                    <div className={'my-10 min-h-full px-4'}>
-                        {nfts.map((item, index) => <NftItem item={item} key={`nft-${index}`}/>)}
+                    <div className={'my-10 grid min-h-full grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4'}>
+                        {
+                            Children.toArray(
+                                nfts.map((item) => 
+                                    <NftItem item={item} getActiveListings={getActiveListings} />
+                                )
+                            )
+                        }
                     </div>
                 </main>
             </div>

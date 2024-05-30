@@ -19,7 +19,7 @@ export const SEO_CONTENT = {
 
 export const PAGE_SIZE = 10
 
-export const CONTRACT_ADDRESS = {
+export const CONTRACT_ADDRESS: Record<"DEVELOPMENT" | "STAGING" | "PRODUCTION", Record<string, `0x${string}`>> = {
     "DEVELOPMENT": {
         "UNIQUE_CONNECTO_TOKEN": "0xa51AAF36BF609c5190539661f111dBE71E6Bb64f",
         "UNIQUE_CONNECTO_NFT_MANAGER": "0x01510CBabD26F8f4CB3326fA0f1579A302D25904",
@@ -32,3 +32,8 @@ export const CONTRACT_ADDRESS = {
     "STAGING": {},
     "PRODUCTION": {}
 }
+
+export const ListingType = {
+    Direct: 0,
+    Auction: 1,
+} as const

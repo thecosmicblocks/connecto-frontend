@@ -26,3 +26,10 @@ html, body {
         transform:  translateX(100%) scaleX(0.5);
     }
 }
+
+.minidenticon-svg svg {
+    border-radius: 50%;
+    background-color: grey;
+    height: 48px;
+    width: 48px;
+}
