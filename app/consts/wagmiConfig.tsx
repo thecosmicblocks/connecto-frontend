@@ -7,6 +7,7 @@ import { createConfig, cookieStorage, createStorage }    from 'wagmi';
 import { opal }            from './wagmiChain';
 import { configureChains } from "@wagmi/core";
 import {
+    createPublicClient,
   http,
 }                          from "viem";
 import { injected, walletConnect } from 'wagmi/connectors'
@@ -17,6 +18,11 @@ const { chains } = configureChains(
   [opal],
   [w3mProvider({ projectId })]
 );
+
+export const publicClient = createPublicClient({
+    chain: opal,
+    transport: http()
+})
 
 export const wagmiConfig = createConfig({
   chains: [ opal ],
@@ -29,6 +35,7 @@ export const wagmiConfig = createConfig({
     [opal.id]: http(),
   },
 });
+
 export const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 /**

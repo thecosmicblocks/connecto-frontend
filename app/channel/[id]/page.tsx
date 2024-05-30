@@ -41,8 +41,7 @@ import { ethers }                         from "ethers";
 import { Address }                        from 'viem';
 import { NATIVE_TOKEN }                   from "@app/consts/wagmiChain";
 import Link                               from "next/link";
-import Big                                from 'big.js';
-
+import { publicClient } from '@/app/consts/wagmiConfig'
 
 function DetailChannel() {
     const router = useRouter();
@@ -86,10 +85,6 @@ function DetailChannel() {
             res.nftCollections = nftCollectionData || []
             setDetail(res);
             setSubscribed(!!res?.userSubcribe?.find((user: any) => user === userInfo?.user?.walletAddress));
-            setDetail({
-                ...detailChannel,
-                numberSubscribers: new Big(detailChannel?.numberSubscribers).add(1).toNumber()
-            } as ChannelDetail)
         }
         getDetail && getDetail();
     }, [ id ]);
@@ -107,6 +102,10 @@ function DetailChannel() {
                 value: donateAmount,
             })
             console.log(donateResp);
+            
+            await publicClient.waitForTransactionReceipt({
+                hash: donateResp
+            })
             return donateResp
         } catch (err) {
             console.error('Donate errr', err)
@@ -125,7 +124,7 @@ function DetailChannel() {
             await donateChannel({amount: Number(donate.donate), channelId: id, transactionHash: res});
             setDetail({
                 ...detailChannel,
-                amountDonate: new Big(detailChannel?.amountDonate).add(donate.donate).toNumber()
+                amountDonate: (detailChannel?.amountDonate || 0) + Number(donate.donate)
             } as ChannelDetail)
         } catch (error) {
             console.log('error: ', error)
@@ -244,7 +243,7 @@ function DetailChannel() {
                             <section className=''>
                                 <h3 className='border-b-2 px-4  text-2xl'>{"ABOUT ME"}</h3>
                             </section>
-                            <div className=""
+                            <div className="mt-5"
                                  dangerouslySetInnerHTML={{
                                      __html: detailChannel.aboutMe as unknown as string
                                  }}
