@@ -8,6 +8,7 @@ import {
 import { FaAngleDown }                    from 'react-icons/fa'
 import classNames                         from 'classnames'
 import {
+    Accordion,
     Avatar,
     Button,
     Card,

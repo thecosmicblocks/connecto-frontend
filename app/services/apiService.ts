@@ -1,11 +1,17 @@
-import axios       from 'axios'
-import { STORAGE } from '@app/utils/constants'
-import { load }    from 'react-cookies'
+import axios           from 'axios'
+import { STORAGE }     from '@app/utils/constants'
+import { load }        from 'react-cookies'
+import { getUserInfo } from "@app/utils/helpers.ts";
 
 const getUrlPrefix = () => '/v1'
-
-const options = { baseURL: process.env.NEXT_PUBLIC_API_URL }
-const instance = axios.create(options)
+const userInfo = getUserInfo()
+console.log(userInfo)
+const instance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+        Authorization: userInfo?.accessToken.token
+    }
+})
 
 instance.interceptors.request.use(
     (config: any) => {

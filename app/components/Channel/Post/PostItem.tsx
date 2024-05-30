@@ -1,11 +1,11 @@
-import React      from 'react'
-import Task       from './Task'
+import React from 'react'
+import Task  from './Task'
 import {
     Avatar,
     Card
-} from "flowbite-react";
-import dayjs      from "dayjs";
-import Image      from 'next/image';
+}            from "flowbite-react";
+import dayjs from "dayjs";
+
 export interface PostItemProps {
     post: any;
     avatar: string;
@@ -21,7 +21,7 @@ const PostItem = ({post, avatar, channelName, channelId}: PostItemProps) => {
             <h3
                 className={'mb-3 text-3xl'}
             >{post?.title}</h3>
-            <div className={'w-1/2'}>
+            <div className={'items-center self-center'}>
                 <img
                     src={thumbnail}
                     alt={post?.title}
@@ -33,14 +33,14 @@ const PostItem = ({post, avatar, channelName, channelId}: PostItemProps) => {
                     img={avatar}
                     title="avatar"
                 />
-                <span
-                >{'By '}</span>
-                <span
-                    color={'red'}
-                    className={'text-red-600 font-bold'}
-                >{channelName}</span>
-                <span
-                >{' in'} {dayjs(post.createdAt).format("YYYY-MM-DD")}</span>
+                <div className={'text-center content-center justify-center self-center items-center align-middle'}>
+                    <p className={'items-center content-center'}> {'By '}
+                        <span
+                            color={'red'}
+                            className={'text-red-600 font-bold'}
+                        >{channelName}</span>
+                        {' in'} {dayjs(post.createdAt).format("YYYY-MM-DD")}</p>
+                </div>
             </div>
             <p
                 dangerouslySetInnerHTML={{__html: post.content.replace(/\n/g, '<br />')}}

@@ -32,7 +32,7 @@ export default function SocialList({detail}: SocialListProps) {
     return (
         <Section title={'Social Links'}>
             <div className="mt-2">
-                <ul className="flex gap-1">
+                <ul className="flex gap-1 justify-center">
                     <Tooltip content={'Youtube'} placement={'bottom'}>
                         <Button className={'md:p-2 items-center self-center'} type={'button'} color={'red'}>
                             <Link

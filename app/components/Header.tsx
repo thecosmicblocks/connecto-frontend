@@ -1,12 +1,17 @@
 'use client'
 
 import { ToggleWalletModalBtn } from '@app/components/WalletModal'
-import { Navbar } from 'flowbite-react'
-import { ComponentProps } from 'react'
+import { Navbar }      from 'flowbite-react'
+import {
+    ComponentProps,
+    useEffect
+}                      from 'react'
 import { usePathname } from 'next/navigation';
 
 export const Header: React.FC<ComponentProps<any>> = ({children}) => {
     const pathname = usePathname();
+    useEffect(() => {
+    }, [])
     return (
         <Navbar
             fluid
@@ -37,7 +42,7 @@ export const Header: React.FC<ComponentProps<any>> = ({children}) => {
                         </Navbar.Link>
                 </div>
                 <ToggleWalletModalBtn
-                    className={"my-5 w-full md:absolute md:right-5 lg:right-12 xl:right-36 md:my-[-7px] md:w-auto"}
+                    className={"flex my-5 w-full md:absolute md:right-5 lg:right-12 xl:right-36 md:my-[-7px] md:w-auto"}
                 />
             </Navbar.Collapse>
         </Navbar>

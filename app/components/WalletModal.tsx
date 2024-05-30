@@ -15,6 +15,11 @@ import { useWalletModalContext } from "../context/WalletContext";
 import { EVMWalletList }         from "./EVMConnectWalletList";
 import { Center }                from "./Center";
 import clsx                      from "clsx";
+import {
+    useEffect,
+    useState
+} from "react";
+import { useToast }              from "@app/hooks/useToast.tsx";
 
 export const ToggleWalletModalBtn = ({
     className,
@@ -23,25 +28,77 @@ export const ToggleWalletModalBtn = ({
 
     const selectedWalletMetadata = walletContext.selectedWalletMetadata;
     const is0x = selectedWalletMetadata?.address?.startsWith("0x");
-
+    const [ isClient, setIsClient ] = useState(false)
+    const toast = useToast();
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
     return selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress ? (
-        <span
-            className={clsx(className)}
-        >
+            isClient && (<div className={clsx(className, 'flex')}>
             <Dropdown
-                label={`Disconnect ${walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...${walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}`}
+                label={`${walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...${walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}`}
                 // onClick={() => {
                 //     walletContext.setUserData(undefined);
                 //     walletContext.setSelectedWalletChainType(undefined);
                 //     selectedWalletMetadata?.disconnect();
                 // }}
-                outline gradientDuoTone="pinkToOrange"
+                outline
+                color={'red'}
+                theme={
+                    {
+                        "floating":
+                            {
+                                "item":
+                                    {
+                                        "container":
+                                            "",
+                                        "base":
+                                            "flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-red-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-red-600 dark:hover:text-white dark:focus:bg-red-600 dark:focus:text-white",
+                                        "icon":
+                                            "mr-2 h-4 w-4"
+                                    }
+                                ,
+                                "style":
+                                    {
+                                        "dark":
+                                            "bg-gray-900 text-white dark:bg-gray-700",
+                                        "light":
+                                            "border border-gray-200 bg-white text-gray-900",
+                                        "auto":
+                                            "border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white"
+                                    }
+                                ,
+                                "target":
+                                    "w-fit"
+                            }
+                        ,
+                    }
+                }
             >
-                <Dropdown.Item>Dashboard</Dropdown.Item>
-                <Dropdown.Item>Settings</Dropdown.Item>
-                <Dropdown.Item>Earnings</Dropdown.Item>
+                <Dropdown.Item> Collection </Dropdown.Item>
+                <Dropdown.Item>Rewards</Dropdown.Item>
+                <Dropdown.Item>Profile</Dropdown.Item>
                 <Dropdown.Divider/>
-                <Dropdown.Item>Separated link</Dropdown.Item>
+                <Dropdown.Item onClick={() => {
+                    navigator.clipboard.writeText(walletContext.userData.user?.walletAddress)
+                    toast('success', 'Address copied')
+                }}>Copy Address</Dropdown.Item>
+                <Dropdown.Item
+                    onClick={() => {
+                        walletContext.setUserData(undefined);
+                        walletContext.setSelectedWalletChainType(undefined);
+                        selectedWalletMetadata?.disconnect();
+                        walletContext.setIsOpen(true)
+                    }}
+                >Change Wallet</Dropdown.Item>
+                <Dropdown.Item
+                    onClick={() => {
+                        walletContext.setUserData(undefined);
+                        walletContext.setSelectedWalletChainType(undefined);
+                        selectedWalletMetadata?.disconnect();
+                        walletContext.setIsOpen(false)
+                    }}
+                >Disconnect</Dropdown.Item>
                 {/*{*/}
                 {/*    selectedWalletMetadata?.icon ? (*/}
                 {/*        <Image*/}
@@ -61,8 +118,9 @@ export const ToggleWalletModalBtn = ({
                 {/*    {walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}*/}
                 {/*</Center>*/}
             </Dropdown>
-        </span>
-    ) : (
+            </div>)
+        ) :
+        (
         <Button
             className={clsx('hover:background-none', className)}
             type="button"
@@ -86,7 +144,8 @@ const LeftMenu = ({
     };
 
     return (
-        <List unstyled className="flex flex-row md:flex-col justify-evenly items-center gap-3 border-b-2 md:border-b-0 md:border-r-2 pb-4 md:pr-4 overflow-auto">
+        <List unstyled
+              className="flex flex-row md:flex-col justify-evenly items-center gap-3 border-b-2 md:border-b-0 md:border-r-2 pb-4 md:pr-4 overflow-auto">
             {
                 Object.values(CHAIN_TYPE).map((chain) => {
                     return (
@@ -113,12 +172,12 @@ const LeftMenu = ({
 }
 
 export const WalletModal = () => {
-    const walletContext  = useWalletModalContext();
+    const walletContext = useWalletModalContext();
     const MenuWalletList = {
         [CHAIN_TYPE.EVM]: EVMWalletList,
     }
-    const RightMenuContent      = MenuWalletList[walletContext.walletChainType];
-    
+    const RightMenuContent = MenuWalletList[walletContext.walletChainType];
+
     return (
         <Modal show={walletContext.isOpen} onClose={() => walletContext.setIsOpen(false)}>
             <Modal.Header></Modal.Header>

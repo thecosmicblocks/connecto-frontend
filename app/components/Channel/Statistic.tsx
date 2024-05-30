@@ -28,7 +28,7 @@ const Statistic = ({detail}: StatisticProps) => {
                     className={'flex px-4 text-2xl'}
                 >STATISTICS</h3>
             </div>
-            <div className={'mt-8 w-full grid grid-flow-row  md:grid-cols-4 gap-3 gap-y-3'}>
+            <div className={'mt-8 w-full grid grid-flow-row  xs:grid-cols-2 sm:grid-cols-2  md:grid-cols-4 gap-3 gap-y-2'}>
                 <Tooltip content={'Subscribe'}>
                     <div className={'flex items-center justify-center'}>
                         <Badge

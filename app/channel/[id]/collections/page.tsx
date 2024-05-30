@@ -67,7 +67,7 @@ function ChannelCollections() {
                 <title>{detailChannel?.name} {t('menu.collection')}</title>
             </Head>
 
-            <div className="container mt-20">
+            <div className="mt-20">
                 {
                     <>
                         <CollectionList data={collectionData} onFetchCollection={onFetchCollection}/>
