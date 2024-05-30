@@ -146,7 +146,7 @@ function DetailChannel() {
     }, [ selectedWalletMetadata ]);
 
     const subscribeChannelLabel = useMemo(() => {
-        return isUserSubscribed ? "Subscribed" : "Subscribed";
+        return isUserSubscribed ? "Subscribed" : "Subscribe";
     }, [ isUserSubscribed ]);
 
     return (
