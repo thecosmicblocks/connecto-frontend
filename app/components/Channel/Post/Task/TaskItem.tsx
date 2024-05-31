@@ -13,6 +13,7 @@ import { FaCheckCircle }  from "react-icons/fa";
 import Link               from "next/link";
 import { t }              from '@app/utils/common'
 import { useToast }       from "@app/hooks/useToast";
+import { getAddress } from 'viem';
 
 export interface TaskItemProps {
     task: any;
@@ -28,7 +29,7 @@ const TaskItem = ({task, index, userInfo, channelId, setTasks}: TaskItemProps) =
     useEffect(() => {
         const handleSubscribe = () => {
             const hasUser = userInfo?.user?.walletAddress
-                && task.userAddress?.find((address: any) => address === userInfo?.user?.walletAddress)
+                && task.userAddress?.find((address: any) => getAddress(address) === getAddress(userInfo?.user?.walletAddress))
             setIsSubscribed(hasUser)
         }
         handleSubscribe && handleSubscribe()

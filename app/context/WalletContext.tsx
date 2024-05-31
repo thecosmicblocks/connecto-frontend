@@ -29,6 +29,7 @@ type WalletMetadata = {
     disconnect: () => void,
     icon: TODO,
     signMsg: () => Promise<string | undefined>,
+    switchChain: () => Promise<void>,
 };
 
 type DefaultWalletContext = {
@@ -97,6 +98,7 @@ export const WalletModalProvider = ({
         address: evmAddress,
         disconnect: disconnectEVM,
         signMessage: evmSignMessage,
+        switchChain: evmSwitchChain,
     } = useEVMClient();
 
     const MSG = typeof window === "undefined" ? "" : `
@@ -113,6 +115,7 @@ See privacy and policy at ${window.location.host}/privacy-policy
         signMsg: async () => {
             return evmSignMessage(MSG)
         },
+        switchChain: evmSwitchChain
     },
   }), [
 
@@ -121,6 +124,7 @@ See privacy and policy at ${window.location.host}/privacy-policy
         disconnectEVM,
         evmSignMessage,
         MSG,
+        evmSwitchChain,
   ])
 
     const selectedWalletMetadata = useMemo(() => {

@@ -6,6 +6,7 @@ import {
     useDisconnect
 }                 from "wagmi";
 import { META_MASK_ERROR_NAMES } from "../consts/metamaskError";
+import { opal } from '../consts/wagmiChain';
 
 const handleError = (errorName = '') => {
   if (errorName !== META_MASK_ERROR_NAMES.connectorNotFoundError) {
@@ -37,6 +38,34 @@ export const useEVMClient = () => {
         }
     }
 
+    const switchChain = async (): Promise<void> => {
+        if (!isConnected) return;
+        
+        try {
+            const chainId = '0x' + opal.id.toString(16);
+            await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                    {
+                        chainId: chainId,
+                        chainName: opal.name,
+                        rpcUrls: [opal.rpcUrls.default.http.at(0)], blockExplorerUrls: [opal.blockExplorers?.default.url],
+                        nativeCurrency: {
+                            symbol: opal.nativeCurrency.symbol,
+                            decimals: opal.nativeCurrency.decimals,
+                        }
+                    }
+                ]
+            });
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: chainId }],
+            });
+        } catch (error) {
+            disconnect()
+        }
+    }
+
     return {
         disconnect,
         isConnected,
@@ -44,5 +73,6 @@ export const useEVMClient = () => {
         signer: signer,
         client: client,
         signMessage,
+        switchChain,
     }
 }

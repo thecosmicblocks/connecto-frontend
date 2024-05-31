@@ -8,7 +8,7 @@ import { opal }            from './wagmiChain';
 import { configureChains } from "@wagmi/core";
 import {
     createPublicClient,
-  http,
+    http,
 }                          from "viem";
 import { injected, walletConnect } from 'wagmi/connectors'
 

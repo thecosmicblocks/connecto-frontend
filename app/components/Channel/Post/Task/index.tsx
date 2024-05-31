@@ -1,6 +1,6 @@
 'use client'
 import ClaimNFTButton  from '@app/components/ClaimNFTButton'
-import { claimNFT }    from '@app/services/postService'
+import { getClaimNFTInfo }    from '@app/services/postService'
 import { getUserInfo } from '@app/utils/helpers'
 import { useRouter }   from 'next/navigation'
 import React, {
@@ -16,6 +16,12 @@ import {
 }                      from "flowbite-react";
 import { useToast }    from "@app/hooks/useToast";
 import { t }           from "@app/utils/common";
+import { getAddress } from 'viem'
+import { useWriteConnectoNftManagerMintToCollection } from '@/Connecto-smart-contract-sdk'
+import { CONTRACT_ADDRESS } from '@/app/utils/constants'
+import { publicClient } from '@/app/consts/wagmiConfig'
+import { opal } from '@/app/consts/wagmiChain'
+import { HiInformationCircle } from 'react-icons/hi'
 
 export interface TaskProps {
     channelId: string;
@@ -28,13 +34,13 @@ const Task = ({channelId, post}: TaskProps) => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ tasks, setTasks ] = useState(post?.tasks || [])
     const [ claimed, setClaimed ] = useState(false)
-    const [ isOpenModal, setIsOpenModal ] = useState(false)
+    const [ isOpenModal, setIsOpenModal ] = useState(true)
     const resultRef = useRef()
     const userInfo = getUserInfo()
     const isFinished = useMemo(() => {
         if (userInfo?.user?.walletAddress) {
-            return tasks.filter((t: { userAddress: string | any[] }) => {
-                return t.userAddress?.includes(userInfo?.user?.walletAddress)
+            return tasks.filter((t: { userAddress: string[] }) => {
+                return t.userAddress?.some((address: string) => getAddress(address) === getAddress(userInfo?.user?.walletAddress))
             }).length === tasks.length
         }
     }, [ tasks, userInfo?.user?.walletAddress ])
@@ -44,23 +50,42 @@ const Task = ({channelId, post}: TaskProps) => {
     }, [ claimed, post?.userAddress, userInfo?.user?.walletAddress ])
     const isClaimable = isFinished && !isClaimed
     const router = useRouter()
+    const { writeContractAsync } = useWriteConnectoNftManagerMintToCollection()
 
     const onClose = () => setIsOpenModal(false)
 
     const claimNft = async () => {
-        setIsLoading(true)
-        const receipt = await claimNFT(post._id)
-        if (!receipt) {
+        const txData = await getClaimNFTInfo(post._id)
+        if (!txData) {
             toast('error', t('channel.task.claim_failed'))
-        } else {
+            return;
+        }
+
+        try {
+            setIsLoading(true)
+            const { claimSignature, orderId } = txData
+            const txHash = await writeContractAsync({
+                address: CONTRACT_ADDRESS.DEVELOPMENT.UNIQUE_CONNECTO_NFT_MANAGER,
+                args: [
+                    post.nftId.nft_collection_address,
+                    userInfo?.user?.walletAddress,
+                    orderId,
+                    claimSignature,
+                ],
+            })
+            await publicClient.waitForTransactionReceipt({
+                hash: txHash
+            });
             setIsOpenModal(true)
             setClaimed(true)
             setTimeout(() => {
                 // @ts-ignore
-                resultRef.current.setAttribute('href', `https://translator.shyft.to/tx/${receipt.txnSignature}?cluster=devnet`)
+                resultRef.current.setAttribute('href', `${opal.blockExplorers?.default.url}/tx/${receipt.txHash}`)
             }, 500)
+        } catch (error) {
+            toast('error', t('channel.task.claim_failed'))
         }
-        setIsLoading(false)
+        
     }
 
     return (
@@ -82,11 +107,9 @@ const Task = ({channelId, post}: TaskProps) => {
                         cursor: isClaimable ? 'pointer' : 'not-allowed',
                     },
                     color: isClaimable ? 'red' : 'gray',
-                    onClick: () => {
-                        if (isClaimable) {
-                            claimNft().then(r => {
-                            })
-                        }
+                    onClick: async () => {
+                        if (!isClaimable) return;                        
+                        await claimNft()
                     },
                     isLoading: isLoading,
                 }}
@@ -96,33 +119,50 @@ const Task = ({channelId, post}: TaskProps) => {
             </ClaimNFTButton>
             <Modal
                 onClose={onClose}
+                show={isOpenModal}
             >
                 <Modal.Body>
                     <Alert
+                        color="success"
+                        icon={HiInformationCircle}
+                        rounded
                         className="flex flex-col items-center justify-center align-middle"
-                        title={'Claim NFT successful!'}
+                        additionalContent={<>
+                            <a
+                                //@ts-ignore
+                                ref={resultRef}
+                                target="_blank"
+                                href=""
+                                rel="nofollow"
+                                className='bg-transparent'
+                            >
+                                {'View your NFT on Explorer'}
+                            </a>
+                        </>}
                     >
-                        <a
-                            //@ts-ignore
-                            ref={resultRef}
-                            target="_blank"
-                            href=""
-                            rel="nofollow"
-                        >
-                            {'View your NFT on Explorer'}
-                        </a>
+                        <span className="font-medium">Claim NFT successful!</span>
                     </Alert>
                     <div
-                        className={'mb-5 justify-center'}
+                        className={'mt-5 flex w-full justify-center'}
                     >
                         <Button
                             className="mr-3"
-                            // @ts-ignore
                             onClick={() => {
-                                router.push('inventory/collection')
+                                router.push('/inventory/collection')
                             }}
                         >
                             {"Go to My Inventory"}
+                        </Button>
+                    </div>
+                    <div
+                        className={'mt-5 flex w-full justify-center'}
+                    >
+                        <Button
+                            className="mr-3"
+                            color={"gray"}
+                            onClick={onClose}
+                        >
+                            {"Close"}
                         </Button>
                     </div>
                 </Modal.Body>

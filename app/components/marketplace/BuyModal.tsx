@@ -30,6 +30,7 @@ const BuyModal = ({ item, isOpen, onClose }: BuyModalProps) => {
     const { writeContractAsync } = useWriteConnectoMarketplaceBuy()
     const { userData } = useWalletModalContext()
     const toast = useToast()
+    const { selectedWalletMetadata } = useWalletModalContext();
 
     const updateMarketItem = async ({ _id }: any) => {
         await buyOrder(_id)
@@ -88,8 +89,10 @@ const BuyModal = ({ item, isOpen, onClose }: BuyModalProps) => {
     }
 
     const onBuy = async () => {
+        if (!selectedWalletMetadata) return;
         try {
             setIsLoading(true)
+            await selectedWalletMetadata.switchChain();
             await compose(notificationAction, updateMarketItem, sendBuyTransaction)({...item})
             onClose()
         } catch (error) {
