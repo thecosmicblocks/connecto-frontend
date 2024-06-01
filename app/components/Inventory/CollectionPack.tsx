@@ -13,7 +13,8 @@ type CollectionPackProps = {
         description?: string,
         image?: string,
         name?: string,
-        order?: any,
+        nftData?: any[]
+        order?: number
         symbol?: string,
     }
 }
@@ -21,18 +22,16 @@ type CollectionPackProps = {
 function CollectionPack({data}: CollectionPackProps) {
     console.log('CollectionPack', data)
     if (!data) return <></>;
-
     return (
 
         <Card>
             <div className={'flex justify-between'}>
-                <p className={'text-red-300'}>Owned: {data.order?.length || 0}</p>
+                <p className={'text-red-300'}>Owned: {data.order || 0}</p>
                 <Dropdown inline label="" theme={{arrowIcon: 'mr-4'}}>
                     <Dropdown.Item>
                         <ListingItem data={data}></ListingItem>
                     </Dropdown.Item>
                 </Dropdown>
-
             </div>
             <Avatar
                 img={data.image}
@@ -55,7 +54,7 @@ function CollectionPack({data}: CollectionPackProps) {
                      placement={'top'}
             >
                 <span
-                    className={'text-lg font-bold text-red-500 underline cursor-pointer'}
+                    className={'cursor-pointer text-lg font-bold text-red-500 underline'}
                     color={'white'}
                 >{data.name} ({data.symbol})</span>
             </Popover>

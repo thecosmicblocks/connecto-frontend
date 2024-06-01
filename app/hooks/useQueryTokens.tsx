@@ -15,7 +15,7 @@ export const useQueryTokens = (walletAddr: string, collectionAddr: string) => {
             "where": {
                 "_and": [
                     {
-                        "tokens_owner": { "_eq": walletAddr },
+                        "tokens_owner": { "_eq": walletAddr.toLowerCase() },
                     },
                     {
                         "burned": { "_eq": "false" }

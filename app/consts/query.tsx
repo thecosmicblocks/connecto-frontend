@@ -11,6 +11,8 @@ export const getTokensQuery = gql`query getTokens($limit: Int, $offset: Int, $wh
     data {
       collection_id
       token_id
+      tokens_owner
+      burned
     }
     count
     timestamp

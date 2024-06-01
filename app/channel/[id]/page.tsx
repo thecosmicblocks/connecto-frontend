@@ -155,9 +155,9 @@ function DetailChannel() {
                     <Head>
                         <title>{detailChannel.name}</title>
                     </Head>
-                    <div className={'mt-20 grid grid-flow-row-dense grid-cols-3 text-white gap-1'}>
+                    <div className={'mt-20 grid grid-flow-row-dense grid-cols-3 gap-1 text-white'}>
                         <article
-                            className="items-center justify-center xl:gap-4 col-span-3 lg:col-span-2"
+                            className="col-span-3 items-center justify-center lg:col-span-2 xl:gap-4"
                         >
                             <h2 className={'text-2xl md:text-3xl '}>{detailChannel.channelName}</h2>
                             <div className={'flex md:flex-col'}>
@@ -214,7 +214,7 @@ function DetailChannel() {
                                             </Tooltip>
                                             <Tooltip content={donateTooltip} placement='bottom'>
                                                 <Button
-                                                    className={'items-center justify-center  px-[5px] py-[8px] md:px-[10px] md:py-[15px] font-extrabold uppercase'}
+                                                    className={'items-center justify-center  px-[5px] py-[8px] font-extrabold uppercase md:px-[10px] md:py-[15px]'}
                                                     onClick={handleDonate}
                                                     isProcessing={isLoading}
                                                     disabled={!(selectedWalletMetadata?.isConnected && walletContext?.userData?.user?.walletAddress)}
@@ -260,8 +260,8 @@ function DetailChannel() {
                                 channelId={detailChannel._id}
                             />
                         </article>
-                        <div className={'mt-20 col-span-3 lg:col-span-1'}>
-                            <Card className={'p-1 w-full'}>
+                        <div className={'col-span-3 mt-20 lg:col-span-1'}>
+                            <Card className={'w-full p-1'}>
                                 <SocialList detail={detailChannel}/>
                             </Card>
                             <Card>
@@ -269,10 +269,9 @@ function DetailChannel() {
                                 <NFTProfile data={detailChannel.nftCollections} className=''/>
                                 <Link
                                     href={`/channel/${detailChannel._id}/collections`}
-                                    className='w-1/2 text-center text-xl underline text-red-400  hover:text-red-600 p-2 mt-2 rounded-md'
+                                    className='mt-2 w-1/2 rounded-md p-2 text-center  text-xl text-red-400 underline hover:text-red-600'
                                 >{"Explore"} {">"}</Link>
                             </Card>
-
                         </div>
                     </div>
                     <DonateModel isOpen={isOpen} setOpen={setOpen} onConfirm={donateForChannel}/>

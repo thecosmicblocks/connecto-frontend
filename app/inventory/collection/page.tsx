@@ -4,26 +4,26 @@ import React, {
     useCallback,
     useEffect,
     useState
-}                                           from 'react'
-import CollectionList                       from '@app/components/Inventory/CollectionList';
-import { getUserInfo }                      from '@app/utils/helpers';
+}                                              from 'react'
+import CollectionList, { CollectionListProps } from '@app/components/Inventory/CollectionList';
+import { getUserInfo }                         from '@app/utils/helpers';
 import { t }                                from '@app/utils/common'
 import { getParticipatedCollectionAddress } from "@app/services";
-import { getUserCollection }                from "@app/services/inventoryService.ts";
-import { useQueryTokens }                   from "@app/hooks/useQueryTokens.tsx";
+import EmptyMessage            from "@app/components/EmptyMessage.tsx";
+import CollectionItem          from "@app/components/Inventory/CollectionItem.tsx";
 
-function Collection() {
+function Collections() {
 
     const [ collectionData, setCollectionData ] = useState([])
     const [ isLoading, setIsLoading ] = useState(true)
     const [ params ] = useState({pageIndex: 1, pageSize: 6})
     const userInfo = getUserInfo()
-
     const getData = useCallback(async () => {
         if (userInfo?.user?.walletAddress) {
             const collections = await getParticipatedCollectionAddress()
             // @ts-ignore
-            setCollectionData(collections)
+            setCollectionData(collections.map(collection => ({...collection, ...collection.collection_info[0]})))
+
             setIsLoading(false)
         }
     }, [ params ])
@@ -51,5 +51,6 @@ function Collection() {
     )
 }
 
-export default Collection
+
+export default Collections
 

@@ -35,7 +35,6 @@ function ChannelCollections() {
                         const res = await getMetadata(_item.address, '0')
                         return {
                             ..._item,
-                            reward_data: _item?.reward_data?.[0],
                             ...res || {}
                         }
                     })
