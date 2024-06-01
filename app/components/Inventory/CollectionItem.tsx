@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
 
-import CollectionPack                     from './CollectionPack'
+import CollectionPack from './CollectionPack'
 import {
     confirmExchangeCollection,
     requestExchangeCollection
-}                                         from '@app/services/inventoryService'
-import { FaAngleDown }                    from 'react-icons/fa'
-import classNames                         from 'classnames'
+}                     from '@app/services/inventoryService'
 import {
     Accordion,
     Avatar,
     Button,
-    Card,
-    Modal,
     Tooltip
-}                                         from "flowbite-react";
-import { useToast }                       from "@app/hooks/useToast";
-import { t } from '@app/utils/common'
+}                     from "flowbite-react";
+import { useToast }   from "@app/hooks/useToast";
+
 interface CollectionItemProps {
     data: {
         _id: string,
@@ -50,7 +46,7 @@ interface CollectionItemProps {
 
 }
 
-function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
+function CollectionItem({data: collectionItem, onFetchCollection}: CollectionItemProps) {
     const [ isOpenModal, setIsOpenModal ] = useState(false)
     const [ isLoadingTransaction, setIsLoadingTransaction ] = useState(false)
     const [ isExpanded, setIsExpanded ] = useState(true)
@@ -61,20 +57,20 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
     const toggleExpand = () => setIsExpanded(prev => !prev)
     const toast = useToast(4000)
 
-    if (!data) return <></>
-    const nftInfo = Array.isArray(data.nft_info) ? data.nft_info : []
+    if (!collectionItem) return <></>
+    const nftInfo = Array.isArray(collectionItem.nft_info) ? collectionItem.nft_info : []
     const isExchangeable = nftInfo.every((_nft: { owned: any }) => _nft.owned)
 
-    const onExchange = async () => {
+    const onExchange = async (collectionItem: { _id: any; channel_id: any; }) => {
         try {
             setIsLoadingTransaction(true)
             const requestExResp = await requestExchangeCollection({
-                "collectionId": data._id,
-                "channelId": data.channel_id
+                "collectionId": collectionItem._id,
+                "channelId": collectionItem.channel_id
             })
 
             const completedTransaction = await Promise.all(
-                requestExResp.encodedTxnData.map((_txData: WithImplicitCoercion<string> | {
+                requestExResp.encodedTxncollectionItem.map((_txData: WithImplicitCoercion<string> | {
                     [Symbol.toPrimitive](hint: "string"): string
                 }) => {
                     // return confirmTransactionFromFrontend();
@@ -82,7 +78,7 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
             )
 
             const {message} = await confirmExchangeCollection({
-                "channelId": data.channel_id,
+                "channelId": collectionItem.channel_id,
                 "txnSignature": completedTransaction,
                 "rewardHistoryId": requestExResp.rewardHistoryId,
             })
@@ -97,84 +93,64 @@ function CollectionItem({data, onFetchCollection}: CollectionItemProps) {
     }
 
     return (
-        <section className='mb-80' id={data.address}>
-            <Card>
-                <div className={'justify-between'}>
-                    <div className={'items-center gap-3'}>
-                        <h3>{data.name}</h3>
-                        <h5>({data.symbol})</h5>
+        <Accordion.Panel key={collectionItem.address}>
+            <div className={'flex justify-between'}>
+                <Button
+                    disabled={!isExchangeable} // || collectionItem.reward_history_data?.length === collectionItem.reward_data?.amount
+                    className={'m-3 h-1/2 content-center bg-red-500'}
+                    onClick={onOpenModal}
+                >Exchange</Button>
+                <Accordion.Title className={'flex w-full justify-between'}>
+                    <div className={'flex gap-3'}>
+                        <h3 className={'text-2xl'}>{collectionItem.name}</h3>
+                        <h5 className={'text-xl'}>({collectionItem.symbol})</h5>
                     </div>
-                    <div className={'items-center gap-6'}>
-                        <button
-                            // TODO: fix this
-                            disabled={!isExchangeable} // || data.reward_history_data?.length === data.reward_data?.amount
-                            className={''}
-                            onClick={onOpenModal}
-                        >
-                            {t('inventory.exchange')}
-                        </button>
 
-                        <FaAngleDown
-                            fontSize='20'
-                            className={classNames('expand-icon', {'rotate-close': !isExpanded})}
-                            onClick={toggleExpand}
-                        />
-                    </div>
+                </Accordion.Title>
                 </div>
-
-                <div className={'flex flex-col gap-12'}>
-                    <Avatar
-                        img={data.image}
-                    />
-                    <Tooltip content={`${data?.reward_data?.name} - ${data?.reward_data?.description}`}>
+            <Accordion.Content>
+                <div className={'grid grid-cols-4'}>
+                    <div className={'col-span-1 flex flex-row'}>
                         <Avatar
-                            img={data?.reward_data?.image_uri || ""}
-                        />
-                    </Tooltip>
-                    <span className={'mt-6 content-center text-center text-xl font-semibold'}>
-                        {data.description}
-                    </span>
-                    {
-                        nftInfo.map(_item => {
-                            return (
-                                <>
-                                    <CollectionPack key={_item._id} data={_item}/>
-                                </>
-                            )
-                        })
-                    }
-                </div>
-            </Card>
-
-            <Modal onClose={onCloseModal}>
-                <Modal.Header>
-                    <h3>
-                        {t('inventory.exchange')}
-                    </h3>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <div className={'flex-col items-center'}>
-                        <Avatar img={data.reward_data?.image_uri}/>
-                        <p className={'mt-6'}>
-                            {t('inventory.exchange_msg').replace("{{amount}}", nftInfo.length.toString()).replace("{{name}}", data.reward_data?.name?.toString())}
-                        </p>
+                            img={collectionItem.image}
+                            rounded
+                            size={'2xl'}
+                        ></Avatar>
+                        <Tooltip
+                            content={`${collectionItem?.reward_data?.name} - ${collectionItem?.reward_data?.description}`}>
+                            <Avatar rounded
+                                    img={collectionItem?.reward_data?.image_uri || ""}
+                                    size={'lg'}
+                                    className={''}
+                            />
+                        </Tooltip>
                     </div>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <div className={'flex'}>
-                        <Button onClick={onCloseModal} color='#fff'
-                        >
-                            {t('inventory.close')}
-                        </Button>
-                        <Button isProcessing={isLoadingTransaction} color='red' onClick={onExchange}>
-                            {t('inventory.confirm')}
-                        </Button>
+                    <div className={'col-span-3 flex flex-row'}>
+                                        <span className={'mt-6 content-center text-center text-xl font-semibold'}>
+                                            {collectionItem.description}
+                                        </span>
+                        {
+                            nftInfo.map((item: {
+                                _id?: any;
+                                amount?: number;
+                                description?: string;
+                                image?: string;
+                                name?: string;
+                                order?: any;
+                                symbol?: string;
+                            }) => {
+                                return (
+                                    <>
+                                        <CollectionPack key={item._id} data={item}/>
+                                    </>
+                                )
+                            })
+                        }
                     </div>
-                </Modal.Footer>
-            </Modal>
-        </section>
+                    </div>
+            </Accordion.Content>
+        </Accordion.Panel>
+
     )
 }
 

@@ -265,7 +265,8 @@ function DetailChannel() {
                                 <SocialList detail={detailChannel}/>
                             </Card>
                             <Card>
-                                <NFTProfile data={detailChannel.nftCollections} className='columns-1'/>
+                                <h3 className='text-2xl'>{"NFT Collections"}</h3>
+                                <NFTProfile data={detailChannel.nftCollections} className=''/>
                                 <Link
                                     href={`/channel/${detailChannel._id}/collections`}
                                     className='w-1/2 text-center text-xl underline text-red-400  hover:text-red-600 p-2 mt-2 rounded-md'

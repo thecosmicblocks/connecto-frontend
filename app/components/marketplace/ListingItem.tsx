@@ -1,20 +1,19 @@
-import ListingModal                       from '@app/components/marketplace/ListingModal'
+import ListingModal       from '@app/components/marketplace/ListingModal'
 import {
     cancelListingOrder,
     listingOrder,
-}                                         from '@app/services'
+}                         from '@app/services'
 // import { confirmTransactionFromFrontend } from '@app/utils/helpers'
-
-import axios                              from 'axios'
+import axios              from 'axios'
 import React, {
     useMemo,
     useState,
-}                                         from 'react'
-import CancelListingModal                 from './CancelListingModal'
-import { Button }                         from "flowbite-react";
-import { useToast }                       from "@app/hooks/useToast";
-import { t } from '@app/utils/common'
-import { opal }                           from "@app/consts/wagmiChain";
+}                         from 'react'
+import CancelListingModal from './CancelListingModal'
+import { Button }         from "flowbite-react";
+import { useToast }       from "@app/hooks/useToast";
+import { t }              from '@app/utils/common'
+import { opal }           from "@app/consts/wagmiChain";
 
 export interface ListingItemProps {
     data: any;
@@ -95,25 +94,23 @@ const ListingItem = ({data}: ListingItemProps) => {
 
     return (
         <>
-            <div className={'mt-2 flex w-full flex-col items-center'}>
-                {nonListing.length ? (
+            <div className={'mt-2 flex w-full min-w-20 flex-col items-center'}>
                     <Button
-                        className={'w-full mb-2'}
-                        disabled={!data.owned}
+                        className={'mb-2 w-full'}
+                        disabled={!data.owned && !nonListing.length }
                         onClick={() => (data.owned && setOpen(true))}
                     >
                         {t('btn.listing')}
                     </Button>
-                ) : ''}
-                {listingItem.length ? (
                     <Button
                         color={'yellow'}
                         isProcessing={isLoading}
                         onClick={canncelListing}
+                        disabled={!nonListing.length}
                     >
                         {t('btn.cancel_listing')}
                     </Button>
-                ) : ''}
+
             </div>
             <ListingModal
                 isOpen={isOpen}

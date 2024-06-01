@@ -34,7 +34,7 @@ const Task = ({channelId, post}: TaskProps) => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ tasks, setTasks ] = useState(post?.tasks || [])
     const [ claimed, setClaimed ] = useState(false)
-    const [ isOpenModal, setIsOpenModal ] = useState(true)
+    const [ isOpenModal, setIsOpenModal ] = useState(false)
     const resultRef = useRef()
     const userInfo = getUserInfo()
     const isFinished = useMemo(() => {

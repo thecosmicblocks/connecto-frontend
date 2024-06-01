@@ -67,12 +67,12 @@ function Profile() {
             <Head>
                 <title>{t('menu.profile')}</title>
             </Head>
-            <div className="flex-row">
-                <div className={'grid grid-cols-2 gap-2'}>
+            <div className="mt-20 flex-row text-white gap-10">
+                <div className={'flex gap-5 p-10'}>
                     <Label>{t('profile.wallet_address')}:</Label>
                     <span className={'size-5'}>{userInfo?.user?.walletAddress}</span>
                 </div>
-                <div className={'grid grid-cols-2 gap-2'}>
+                <div className={'flex gap-5 p-10 align-middle content-center items-center'}>
                     <Label>Discord:</Label>
                     {
                         userInfo?.user?.discordUsername ? (
@@ -87,7 +87,7 @@ function Profile() {
                                     </span>
                         ) : (
                             <Button
-                                color='white'
+                                color={'red'}
                                 onClick={onSignInDiscord}
                             >{t('profile.connect_with_discord')}</Button>
                         )

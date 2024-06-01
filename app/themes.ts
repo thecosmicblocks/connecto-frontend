@@ -446,7 +446,7 @@ export const themes: CustomFlowbiteTheme = {
         }
     },
     popover:{
-        "base": "absolute z-20 inline-block w-max max-w-[100vw] bg-white outline-none border border-gray-200 rounded-lg shadow-sm dark:border-gray-600 dark:bg-gray-800",
+        "base": "absolute z-20 inline-block w-max max-w-[50vw] bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-600 dark:bg-gray-800",
         "content": "z-10 overflow-hidden rounded-[7px]",
         "arrow": {
             "base": "absolute h-2 w-2 z-0 rotate-45 mix-blend-lighten bg-white border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:mix-blend-color",
@@ -455,7 +455,7 @@ export const themes: CustomFlowbiteTheme = {
     },
     dropdown: {
         "arrowIcon": "ml-2 h-4 w-4",
-        "content": "py-1 focus:outline-none",
+        "content": "py-1",
         "floating": {
             "animation": "transition-opacity",
             "arrow": {
@@ -465,7 +465,7 @@ export const themes: CustomFlowbiteTheme = {
                     "light": "bg-white",
                     "auto": "bg-white dark:bg-gray-700"
                 },
-                "placement": "-4px"
+                "placement": "-4px",
             },
             "base": "z-10 w-fit divide-y divide-gray-100 rounded shadow focus:outline-none",
             "content": "py-1 text-sm text-gray-700 dark:text-gray-200",
@@ -485,5 +485,119 @@ export const themes: CustomFlowbiteTheme = {
             "target": "w-fit"
         },
         "inlineWrapper": "flex items-center"
+    },
+    accordion: {
+        "root": {
+            "base": "divide-y divide-gray-200 border-gray-200 dark:divide-gray-700 dark:border-gray-700",
+            "flush": {
+                "off": "rounded-lg border",
+                "on": "border-b"
+            }
+        },
+        "content": {
+            "base": "p-5 first:rounded-t-lg last:rounded-b-lg dark:bg-gray-900"
+        },
+        "title": {
+            "arrow": {
+                "base": "h-6 w-6 shrink-0",
+                "open": {
+                    "off": "",
+                    "on": "rotate-180"
+                }
+            },
+            "base": "flex w-full items-center justify-between p-5 text-left font-medium text-gray-500 first:rounded-t-lg last:rounded-b-lg dark:text-gray-400",
+            "flush": {
+                "off": " dark:hover:bg-gray-800 dark:focus:ring-gray-800",
+                "on": "bg-transparent dark:bg-transparent"
+            },
+            "heading": "",
+            "open": {
+                "off": "",
+                "on": "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+            }
+        }
+    },
+    avatar: {
+        "root": {
+            "base": "flex items-center justify-center space-x-4 rounded",
+            "bordered": "p-1 ring-2",
+            "rounded": "rounded-full",
+            "color": {
+                "dark": "ring-gray-800 dark:ring-gray-800",
+                "failure": "ring-red-500 dark:ring-red-700",
+                "gray": "ring-gray-500 dark:ring-gray-400",
+                "info": "ring-cyan-400 dark:ring-cyan-800",
+                "light": "ring-gray-300 dark:ring-gray-500",
+                "purple": "ring-purple-500 dark:ring-purple-600",
+                "success": "ring-green-500 dark:ring-green-500",
+                "warning": "ring-yellow-300 dark:ring-yellow-500",
+                "pink": "ring-pink-500 dark:ring-pink-500"
+            },
+            "img": {
+                "base": "rounded",
+                "off": "relative overflow-hidden bg-gray-100 dark:bg-gray-600",
+                "on": "",
+                "placeholder": "absolute -bottom-1 h-auto w-auto text-gray-400"
+            },
+            "size": {
+                "xs": "h-6 w-6",
+                "sm": "h-8 w-8",
+                "md": "h-10 w-10",
+                "lg": "h-24 w-24",
+                "xl": "h-48 w-48",
+                "2xl": "h-96 w-96",
+
+            },
+            "stacked": "ring-2 ring-gray-300 dark:ring-gray-500",
+            "statusPosition": {
+                "bottom-left": "-bottom-1 -left-1",
+                "bottom-center": "-bottom-1",
+                "bottom-right": "-bottom-1 -right-1",
+                "top-left": "-left-1 -top-1",
+                "top-center": "-top-1",
+                "top-right": "-right-1 -top-1",
+                "center-right": "-right-1",
+                "center": "",
+                "center-left": "-left-1"
+            },
+            "status": {
+                "away": "bg-yellow-400",
+                "base": "absolute h-3.5 w-3.5 rounded-full border-2 border-white dark:border-gray-800",
+                "busy": "bg-red-400",
+                "offline": "bg-gray-400",
+                "online": "bg-green-400"
+            },
+            "initials": {
+                "text": "font-medium text-gray-600 dark:text-gray-300",
+                "base": "relative inline-flex items-center justify-center overflow-hidden bg-gray-100 dark:bg-gray-600"
+            }
+        },
+        "group": {
+            "base": "flex -space-x-4"
+        },
+        "groupCounter": {
+            "base": "relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-700 text-xs font-medium text-white ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500"
+        }
+    },
+    tooltip: {
+        "target": "w-fit",
+        "animation": "transition-opacity",
+        "arrow": {
+            "base": "absolute z-10 h-2 w-2 rotate-45",
+            "style": {
+                "dark": "bg-gray-900 dark:bg-gray-700",
+                "light": "bg-white",
+                "auto": "bg-white dark:bg-gray-700"
+            },
+            "placement": "-4px"
+        },
+        "base": "absolute z-10 inline-block rounded-lg px-3 py-2 text-sm font-medium shadow-sm",
+        "hidden": "invisible opacity-0",
+        "style": {
+            "dark": "bg-gray-900 text-white dark:bg-gray-700",
+            "light": "border border-gray-200 bg-white text-gray-900",
+            "auto": "border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white"
+        },
+        "content": "relative z-20"
     }
 }

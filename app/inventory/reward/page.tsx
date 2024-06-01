@@ -42,7 +42,7 @@ export default function MyInventory() {
             <Head>
                 <title>{t('menu.reward')}</title>
             </Head>
-            <div className="container">
+            <div className="mt-20">
                 {
                     isLoading ? (
                         <LoadingSkeleton isLoading={isLoading}/>

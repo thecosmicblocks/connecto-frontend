@@ -18,14 +18,15 @@ import clsx                      from "clsx";
 import {
     useEffect,
     useState
-} from "react";
+}                    from "react";
 import { useToast }              from "@app/hooks/useToast.tsx";
+import { useRouter } from "next/navigation";
 
 export const ToggleWalletModalBtn = ({
     className,
 }: any) => {
     const walletContext = useWalletModalContext();
-
+    const route = useRouter()
     const selectedWalletMetadata = walletContext.selectedWalletMetadata;
     const is0x = selectedWalletMetadata?.address?.startsWith("0x");
     const [ isClient, setIsClient ] = useState(false)
@@ -75,9 +76,11 @@ export const ToggleWalletModalBtn = ({
                     }
                 }
             >
-                <Dropdown.Item> Collection </Dropdown.Item>
-                <Dropdown.Item>Rewards</Dropdown.Item>
-                <Dropdown.Item>Profile</Dropdown.Item>
+                <Dropdown.Item href={'/inventory/collection'}>
+                    Collection
+                </Dropdown.Item>
+                <Dropdown.Item href={'/inventory/reward'}>Rewards</Dropdown.Item>
+                <Dropdown.Item href={'/profile/'}>Profile</Dropdown.Item>
                 <Dropdown.Divider/>
                 <Dropdown.Item onClick={() => {
                     navigator.clipboard.writeText(walletContext.userData.user?.walletAddress)
@@ -99,24 +102,6 @@ export const ToggleWalletModalBtn = ({
                         walletContext.setIsOpen(false)
                     }}
                 >Disconnect</Dropdown.Item>
-                {/*{*/}
-                {/*    selectedWalletMetadata?.icon ? (*/}
-                {/*        <Image*/}
-                {/*            loading="lazy"*/}
-                {/*            width={20}*/}
-                {/*            height={20}*/}
-                {/*            src={selectedWalletMetadata?.icon}*/}
-                {/*            alt={walletContext?.selectedWalletChainType || ""}*/}
-                {/*            className="mr-1"*/}
-                {/*        />*/}
-                {/*    ) : (*/}
-                {/*        <></>*/}
-                {/*    )*/}
-                {/*}*/}
-                {/*<Center>*/}
-                {/*    Disconnect {walletContext.userData.user?.walletAddress?.substring(0, is0x ? 6 : 3)}...*/}
-                {/*    {walletContext.userData.user?.walletAddress?.substring(walletContext.userData.user?.walletAddress?.length - (is0x ? 4 : 3))}*/}
-                {/*</Center>*/}
             </Dropdown>
             </div>)
         ) :
@@ -182,7 +167,7 @@ export const WalletModal = () => {
         <Modal show={walletContext.isOpen} onClose={() => walletContext.setIsOpen(false)}>
             <Modal.Header></Modal.Header>
             <Modal.Body>
-                <div className="flex flex-wrap flex-col md:flex-row">
+                <div className="flex flex-col flex-wrap md:flex-row">
                     {/*<LeftMenu*/}
                     {/*    onClick={(chain: ChainTypeValue) => {*/}
                     {/*        walletContext.setWalletChainType(chain)*/}

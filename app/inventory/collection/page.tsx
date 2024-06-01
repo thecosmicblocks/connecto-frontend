@@ -1,38 +1,29 @@
 'use client'
-import Head                  from 'next/head'
+import Head                                 from 'next/head'
 import React, {
     useCallback,
     useEffect,
     useState
-}                            from 'react'
-import CollectionList        from '@app/components/Inventory/CollectionList';
-import { getUserInfo }       from '@app/utils/helpers';
-import { getUserCollection } from '@app/services/inventoryService'
-import axios                 from 'axios';
-import { t } from '@app/utils/common'
+}                                           from 'react'
+import CollectionList                       from '@app/components/Inventory/CollectionList';
+import { getUserInfo }                      from '@app/utils/helpers';
+import { t }                                from '@app/utils/common'
+import { getParticipatedCollectionAddress } from "@app/services";
+import { getUserCollection }                from "@app/services/inventoryService.ts";
+import { useQueryTokens }                   from "@app/hooks/useQueryTokens.tsx";
 
 function Collection() {
 
     const [ collectionData, setCollectionData ] = useState([])
     const [ isLoading, setIsLoading ] = useState(true)
     const [ params ] = useState({pageIndex: 1, pageSize: 6})
+    const userInfo = getUserInfo()
 
     const getData = useCallback(async () => {
-        const userInfo = getUserInfo()
         if (userInfo?.user?.walletAddress) {
-            const {items} = await getUserCollection(userInfo?.user?.walletAddress, params)
-            const data = await Promise.all(
-                items?.map(async (_item: { metadata_uri: string; reward_data: any[]; }) => {
-                    const resp = await axios.get(_item.metadata_uri)
-                    return {
-                        ..._item,
-                        reward_data: _item?.reward_data?.[0],
-                        ...resp.data || {}
-                    }
-                })
-            )
+            const collections = await getParticipatedCollectionAddress()
             // @ts-ignore
-            setCollectionData(data)
+            setCollectionData(collections)
             setIsLoading(false)
         }
     }, [ params ])
@@ -47,8 +38,7 @@ function Collection() {
                 <title>{t('menu.collection')}</title>
             </Head>
 
-            <div className="container">
-                <div className="w-full">
+                <div className="w-full mt-20">
                     {
                         (
                             <>
@@ -57,7 +47,6 @@ function Collection() {
                         )
                     }
                 </div>
-            </div>
         </>
     )
 }

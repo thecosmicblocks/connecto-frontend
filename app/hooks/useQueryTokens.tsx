@@ -8,7 +8,7 @@ import { getMetadata } from "../services";
 import { useEffect, useState } from "react";
 
 export const useQueryTokens = (walletAddr: string, collectionAddr: string) => {
-    const [nftData, setNftData] = useState<TODO[]>([]);    
+    const [nftData, setNftData] = useState<TODO[]>([]);
 
     const { data, refetch } = useSuspenseQuery<GetTokensQueryResult>(getTokensQuery, {
         "variables": {
@@ -38,6 +38,7 @@ export const useQueryTokens = (walletAddr: string, collectionAddr: string) => {
                     data.tokens.data.map(async (token) => {
                         return await getMetadata(collectionAddr, token.token_id)
                     })
+
                 ).then((metadatas) => {                  
                     metadatas.forEach((metadata: any, index) => {
                         nftData[index] = {
