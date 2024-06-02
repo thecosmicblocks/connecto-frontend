@@ -37,7 +37,7 @@ export const Header: React.FC<ComponentProps<any>> = ({children}) => {
                         <Navbar.Link href="/" active={[ '/' ].includes(pathname)} className={'text-lg'}>
                             Channels
                         </Navbar.Link>
-                        <Navbar.Link  href="/marketplace" active={[ '/marketplace' ].includes(pathname)} className={'text-lg'}>
+                        <Navbar.Link target='_blank'  href="https://www.thecosmicblock.com/" active={[ '/marketplace' ].includes(pathname)} className={'text-lg'}>
                             Marketplace
                         </Navbar.Link>
                 </div>

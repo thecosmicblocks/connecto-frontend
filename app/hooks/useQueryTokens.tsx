@@ -5,11 +5,11 @@ import { GetTokensQueryResult, TODO } from "../consts/type";
 import { getTokensQuery } from "../consts/query";
 import { Address } from "@unique-nft/utils";
 import { getMetadata } from "../services";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useQueryTokens = (walletAddr: string, collectionAddr: string) => {
-    const [nftData, setNftData] = useState<TODO[]>([]);
-
+    const [nftData, _setNftData] = useState<TODO[]>([]);
+    const setNftData = useCallback((data: TODO[]) => _setNftData(data), [])
     const { data, refetch } = useSuspenseQuery<GetTokensQueryResult>(getTokensQuery, {
         "variables": {
             "where": {
@@ -40,20 +40,26 @@ export const useQueryTokens = (walletAddr: string, collectionAddr: string) => {
                     })
 
                 ).then((metadatas) => {                  
-                    metadatas.forEach((metadata: any, index) => {
-                        nftData[index] = {
+                    const fulfilledNft = metadatas.map((metadata: any, index) => {
+                        console.log({
+                            ...data.tokens.data[index],
+                            ...metadata,
+                        });
+                        
+                        return {
                             ...data.tokens.data[index],
                             ...metadata,
                         }
                     })
-                    setNftData(nftData)
+                    setNftData(fulfilledNft)
                 })
             }
         }
-        if (data && data.tokens && data.tokens.data) {
+
+        if (data && data.tokens && data.tokens.data && nftData.length === 0) {
             fetchMetadata()
         }
-    }, [data, nftData, collectionAddr])
+    }, [data, nftData.length, collectionAddr, setNftData])
     
 
     return {

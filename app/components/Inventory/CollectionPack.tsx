@@ -16,6 +16,7 @@ type CollectionPackProps = {
         nftData?: any[]
         order?: number
         symbol?: string,
+        owned?: number,
     }
 }
 
@@ -26,7 +27,7 @@ function CollectionPack({data}: CollectionPackProps) {
 
         <Card>
             <div className={'flex justify-between'}>
-                <p className={'text-red-300'}>Owned: {data.order || 0}</p>
+                <p className={'text-red-300'}>Owned: {data.owned || 0}</p>
                 <Dropdown inline label="" theme={{arrowIcon: 'mr-4'}}>
                     <Dropdown.Item>
                         <ListingItem data={data}></ListingItem>

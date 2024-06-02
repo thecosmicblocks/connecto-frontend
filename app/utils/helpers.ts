@@ -23,8 +23,9 @@ export const getUserInfo = () => {
 }
 
 export const saveUserInfo = (data: { user: any; accessToken: any }) => {
+    if (!data || !data.accessToken || !data.user) return
     cookie.save(STORAGE.USER_INFO, JSON.stringify(data?.user), {})
-    cookie.save(STORAGE.ACCESS_TOKEN, data.accessToken, {})
+    cookie.save(STORAGE.ACCESS_TOKEN, data?.accessToken, {})
 }
 
 export const clearUserInfo = () => {
