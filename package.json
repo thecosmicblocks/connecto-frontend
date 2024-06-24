@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "author": {
-    "email": "phamanhtan@proton.me",
-    "name": "Pham Anh Tan",
-    "url": "https://github.com/ngankilo"
+    "name": "The Cosmic Blocks Lab",
+    "email": "hello@thecosmicblock.com",
+    "url": "https://thecosmicblock.com/"
   },
+  "license": "MIT",
   "description": "Connecto",
   "scripts": {
     "dev": "next dev",
